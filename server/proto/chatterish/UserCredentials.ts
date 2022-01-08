@@ -2,13 +2,11 @@
 
 
 export interface UserCredentials {
-  'email'?: (string);
-  'username'?: (string);
+  'usernameOrEmail'?: (string);
   'password'?: (string);
 }
 
 export interface UserCredentials__Output {
-  'email'?: (string);
-  'username'?: (string);
+  'usernameOrEmail'?: (string);
   'password'?: (string);
 }
