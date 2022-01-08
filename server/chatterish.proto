@@ -22,7 +22,6 @@ message Token {
 }
 
 message UserCredentials {
-    string email = 1;
-    string username = 2;
-    string password = 3; 
+    string usernameOrEmail = 1;
+    string password = 2; 
 }
