@@ -1,7 +1,14 @@
-import grpc from '@grpc/grpc-js';
+import * as grpc from '@grpc/grpc-js';
 import * as loader from '@grpc/proto-loader';
 import { ProtoGrpcType } from './proto/chatterish';
 import { AuthServiceHandlers } from './proto/chatterish/AuthService';
+import { userSchema } from './schemas/user-schema';
+import { connect } from 'mongoose';
+
+connect('mongodb://localhost:27017/chatterish', (err) => {
+    if (err) return console.error(err);
+    console.log('Successfully connected to Mongo DB!');
+});
 
 const PROTO_PATH = './chatterish.proto';
 const PORT = 8082;
