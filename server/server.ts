@@ -2,8 +2,8 @@ import * as grpc from '@grpc/grpc-js';
 import * as loader from '@grpc/proto-loader';
 import { ProtoGrpcType } from './proto/chatterish';
 import { AuthServiceHandlers } from './proto/chatterish/AuthService';
-import { userSchema } from './schemas/user-schema';
 import { connect } from 'mongoose';
+import { signUserUp } from './apis/auth/auth';
 
 connect('mongodb://localhost:27017/chatterish', (err) => {
     if (err) return console.error(err);
@@ -42,5 +42,17 @@ server.bindAsync(
 
 server.addService(authService.service, {
     SignUserIn: async (call, res) => {},
-    SignUserUp: async (call, res) => {},
+    SignUserUp: async (call, res) => {
+        const { birthdate, email, nationality, password, username } =
+            call.request;
+        if (!birthdate || !email || !nationality || !password || !username) {
+            return res({
+                code: 400,
+                message:
+                    'Username, password, email, nationality and password are all required fields!',
+            });
+        }
+
+        signUserUp(call);
+    },
 } as AuthServiceHandlers);
