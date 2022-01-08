@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package chatterish;
+
+service AuthService {
+    rpc SignUserIn(User) returns(Token) {};
+    rpc SignUserUp(UserCredentials) returns (google.protobuf.Empty) {};
+}
+
+message User {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+    string birthdate = 4;
+    string nationality = 5;
+}
+
+message Token {
+    string token = 1;
+}
+
+message UserCredentials {
+    string email = 1;
+    string username = 2;
+    string password = 3; 
+}
