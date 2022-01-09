@@ -55,27 +55,25 @@ export async function signUserInHandler(
     console.log('caught sign in call!!!!');
     const { usernameOrEmail, password } = call.request;
 
-    if (!usernameOrEmail || !password) {
+    if (!usernameOrEmail || !password)
         return res({
             code: 400,
             message: 'Username/email and password are required!',
         });
-    }
+
     try {
         const userFromDb = await User.findOne({ usernameOrEmail }).exec();
 
-        if (!userFromDb) {
-            throw new Error('No user exists with this credentials!');
-        }
+        if (!userFromDb)
+            return res({ code: 400, message: "User doesn't exist!" });
 
         const didPasswordMatch = bcrypt.compareSync(
             password,
             userFromDb.password
         );
 
-        if (!didPasswordMatch) {
-            throw new Error('Incorrect credentials.');
-        }
+        if (!didPasswordMatch)
+            return res({ code: 400, message: 'Incorrect credentials!' });
 
         const token = jwt.sign({ ...userFromDb }, 'mykey', {
             expiresIn: '10m',
