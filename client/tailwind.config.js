@@ -4,10 +4,10 @@ module.exports = {
     theme: {
         screens: {
             sm: '300px',
-            md: '492px',
-            lg: '768px',
-            xl: '1024px',
-            '2xl': '1280px',
+            md: '576px',
+            lg: '968px',
+            xl: '1280px',
+            '2xl': '1568px',
         },
         extend: {
             backgroundImage: {

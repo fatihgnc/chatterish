@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    input {
+        @apply outline-none border-none px-6 py-3 ml-4 bg-slate-300 text-base;
+    }
+}
