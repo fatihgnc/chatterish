@@ -2,7 +2,7 @@ import MainContentWrapper from '../ui/MainContentWrapper';
 
 const ProfileScreen = () => {
     return (
-        <MainContentWrapper>
+        <MainContentWrapper bg='bg-gray-900'>
             <div>
                 <h1 className='text-3xl text-white px-6 py-4'>Profile</h1>
             </div>

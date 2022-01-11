@@ -1,6 +1,7 @@
-const MainContentWrapper: React.FC = (props) => {
+const MainContentWrapper: React.FC<{ bg: string }> = (props) => {
     return (
-        <div className='relative w-2/3 mx-auto h-auto bg-gray-900 opacity-95 flex flex-col'>
+        <div
+            className={`relative w-2/3 mx-auto h-auto ${props.bg} opacity-95 flex flex-col`}>
             {props.children}
         </div>
     );

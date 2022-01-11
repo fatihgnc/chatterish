@@ -35,16 +35,12 @@ const Nav = () => {
                     title='go profile page'>
                     <Person />
                 </NavLink>
-                <NavLink
-                    to='login'
-                    className={({ isActive }) =>
-                        !isActive
-                            ? 'flex gap-2 text-white p-4 hover:bg-neutral-100 hover:text-black ease-in-out duration-300 transition-all cursor-pointer rounded-full'
-                            : 'bg-neutral-100 flex gap-2 text-black p-4 ease-in-out duration-300 transition-all cursor-pointer rounded-full'
-                    }
-                    title='logout'>
+                <button
+                    title='logout'
+                    className='flex gap-2 text-white p-4 hover:bg-neutral-100 hover:text-black ease-in-out duration-300 transition-all cursor-pointer rounded-full'
+                    onClick={(e) => null}>
                     <Logout />
-                </NavLink>
+                </button>
             </nav>
         </aside>
     );
