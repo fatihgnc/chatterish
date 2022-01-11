@@ -1,6 +1,6 @@
 const MainContentWrapper: React.FC = (props) => {
     return (
-        <div className='flex-auto flex flex-col justify-center gap-10 bg-home bg-no-repeat bg-center bg-cover'>
+        <div className='relative w-2/3 mx-auto h-auto bg-gray-900 opacity-95 flex flex-col'>
             {props.children}
         </div>
     );
