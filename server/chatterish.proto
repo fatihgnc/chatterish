@@ -5,7 +5,7 @@ import "google/protobuf/empty.proto";
 package chatterish;
 
 service AuthService {
-    rpc SignUserIn(UserCredentials) returns(Token) {};
+    rpc SignUserIn(UserCredentials) returns(SignInResponse) {};
     rpc SignUserUp(User) returns (google.protobuf.Empty) {};
 }
 
@@ -17,8 +17,9 @@ message User {
     string nationality = 5;
 }
 
-message Token {
+message SignInResponse {
     string token = 1;
+    User user = 2;
 }
 
 message UserCredentials {

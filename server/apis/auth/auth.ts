@@ -7,6 +7,7 @@ import { Empty } from '../../proto/google/protobuf/Empty';
 import { userSchema } from '../../schemas/user-schema';
 import { User } from '../../models/user';
 import bcrypt from 'bcryptjs';
+import { SignInResponse } from '../../proto/chatterish/SignInResponse';
 
 export async function signUserUpHandler(
     call: grpc.ServerUnaryCall<User__Output, Empty>,
@@ -50,7 +51,7 @@ export async function signUserUpHandler(
 
 export async function signUserInHandler(
     call: grpc.ServerUnaryCall<UserCredentials__Output, Token>,
-    res: grpc.sendUnaryData<Token>
+    res: grpc.sendUnaryData<SignInResponse>
 ): Promise<void> {
     console.log('caught sign in call!!!!');
     const { usernameOrEmail, password } = call.request;
@@ -81,7 +82,7 @@ export async function signUserInHandler(
 
         console.log('Signed in successfully!');
 
-        res(null, { token });
+        res(null, { token, user: userFromDb });
     } catch (error) {
         throw error;
     }

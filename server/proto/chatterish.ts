@@ -10,7 +10,7 @@ type SubtypeConstructor<Constructor extends new (...args: any) => any, Subtype> 
 export interface ProtoGrpcType {
   chatterish: {
     AuthService: SubtypeConstructor<typeof grpc.Client, _chatterish_AuthServiceClient> & { service: _chatterish_AuthServiceDefinition }
-    Token: MessageTypeDefinition
+    SignInResponse: MessageTypeDefinition
     User: MessageTypeDefinition
     UserCredentials: MessageTypeDefinition
   }
