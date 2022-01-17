@@ -14,26 +14,46 @@ export async function signUserUpHandler(
     res: grpc.sendUnaryData<Empty>
 ): Promise<void> {
     console.log('caught sign up call!!!!');
-    const { birthdate, email, nationality, password, username } = call.request;
+    const { birthdate, email, nationality, password, username, confirmPsw } =
+        call.request;
 
-    if (!birthdate || !email || !nationality || !password || !username)
+    if (
+        !birthdate ||
+        !email ||
+        !nationality ||
+        !password ||
+        !username ||
+        !confirmPsw
+    )
         return res({
             code: 400,
             message:
                 'Username, password, email, nationality and password are all required fields!',
         });
 
-    try {
-        const userDoesExist = await User.findOne({ username }).exec();
+    if (password !== confirmPsw) {
+        return res({
+            code: 400,
+            message: 'Passwords do not match!',
+        });
+    }
 
-        if (userDoesExist)
+    try {
+        const doesUserExist = await User.findOne({ username }).exec();
+
+        if (doesUserExist)
             return res({ code: 400, message: 'This username already exists!' });
 
         const userFromClient = call.request;
+        delete userFromClient.confirmPsw;
 
         const { value, error } = userSchema.validate(userFromClient);
 
-        if (error) return res({ code: 400, message: error.details[0].message });
+        if (error)
+            return res({
+                code: 400,
+                message: error.details.map((err) => err.message).join(', '),
+            });
 
         userFromClient.password = bcrypt.hashSync(
             userFromClient.password as string
@@ -63,7 +83,9 @@ export async function signUserInHandler(
         });
 
     try {
-        const userFromDb = await User.findOne({ usernameOrEmail }).exec();
+        const userFromDb = await User.findOne({
+            $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+        }).exec();
 
         if (!userFromDb)
             return res({ code: 400, message: "User doesn't exist!" });

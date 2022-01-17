@@ -15,6 +15,7 @@ message User {
     string email = 3;
     string birthdate = 4;
     string nationality = 5;
+    string confirmPsw = 6;
 }
 
 message SignInResponse {

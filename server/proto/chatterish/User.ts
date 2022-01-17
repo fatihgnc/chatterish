@@ -7,6 +7,7 @@ export interface User {
   'email'?: (string);
   'birthdate'?: (string);
   'nationality'?: (string);
+  'confirmPsw'?: (string);
 }
 
 export interface User__Output {
@@ -15,4 +16,5 @@ export interface User__Output {
   'email'?: (string);
   'birthdate'?: (string);
   'nationality'?: (string);
+  'confirmPsw'?: (string);
 }
