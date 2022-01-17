@@ -6,6 +6,7 @@ import MainContentWrapper from '../ui/MainContentWrapper';
 const RegisterForm = () => {
     const userCtx = useContext(UserContext);
 
+    const [pswError, setPswError] = useState('');
     const [username, setUsername] = useState('');
     const [psw, setPsw] = useState('');
     const [confPsw, setConfPsw] = useState('');
@@ -18,6 +19,10 @@ const RegisterForm = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        if (psw !== confPsw) {
+            return setPswError("Passwords don't match!");
+        }
+
         try {
             await userCtx.signUp(
                 username,
@@ -28,6 +33,7 @@ const RegisterForm = () => {
                 confPsw
             );
 
+            setPswError('');
             setUsername('');
             setPsw('');
             setConfPsw('');
@@ -42,7 +48,7 @@ const RegisterForm = () => {
     return (
         <MainContentWrapper bg='bg-gray-900'>
             <div className='sm:px-5 xl:px-8 py-8 text-white'>
-                <h1 className='text-2xl mb-6 pb-4'>Register Form</h1>
+                <h1 className='text-2xl pb-4'>Register Form</h1>
                 <form onSubmit={handleSubmit} className='sm:p-4 xl:p-10'>
                     <div className='mb-4 flex flex-col xl:gap-3 overflow-hidden'>
                         <label
@@ -70,6 +76,7 @@ const RegisterForm = () => {
                             placeholder='8-40 chars - at least 1 letter and number...'
                             onChange={(e) => setPsw(e.target.value)}
                             value={psw}
+                            required
                             className='flex-1 w-full'
                         />
                     </div>
@@ -85,8 +92,12 @@ const RegisterForm = () => {
                             type='password'
                             onChange={(e) => setConfPsw(e.target.value)}
                             value={confPsw}
+                            required
                             className='flex-1 w-full'
                         />
+                        {pswError ? (
+                            <small className='text-red-300 inline-block mt-2'></small>
+                        ) : null}
                     </div>
                     <div className='mb-4 flex flex-col xl:gap-3 overflow-hidden'>
                         <label
@@ -100,6 +111,7 @@ const RegisterForm = () => {
                             placeholder='Enter your email...'
                             onChange={(e) => setEmail(e.target.value)}
                             value={email}
+                            required
                             className='flex-1 w-full'
                         />
                     </div>
@@ -114,6 +126,7 @@ const RegisterForm = () => {
                             type='date'
                             onChange={(e) => setBirthdate(e.target.value)}
                             value={birthdate}
+                            required
                             className='flex-1 w-full'
                         />
                     </div>
@@ -127,6 +140,7 @@ const RegisterForm = () => {
                             onChange={(e) => setNationality(e.target.value)}
                             value={nationality}
                             id='country'
+                            required
                             className='outline-none p-3 flex-1 w-full bg-gray-800 xl:text-lg sm:text-base'>
                             <option value='Afghanistan'>Afghanistan</option>
                             <option value='Albania'>Albania</option>

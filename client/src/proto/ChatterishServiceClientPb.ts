@@ -122,5 +122,91 @@ export class AuthServiceClient {
     this.methodInfoSignUserUp);
   }
 
+  methodInfoUpdatePassword = new grpcWeb.MethodDescriptor(
+    '/chatterish.AuthService/UpdatePassword',
+    grpcWeb.MethodType.UNARY,
+    chatterish_pb.UpdatePasswordRequest,
+    chatterish_pb.UpdateResponse,
+    (request: chatterish_pb.UpdatePasswordRequest) => {
+      return request.serializeBinary();
+    },
+    chatterish_pb.UpdateResponse.deserializeBinary
+  );
+
+  updatePassword(
+    request: chatterish_pb.UpdatePasswordRequest,
+    metadata: grpcWeb.Metadata | null): Promise<chatterish_pb.UpdateResponse>;
+
+  updatePassword(
+    request: chatterish_pb.UpdatePasswordRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: chatterish_pb.UpdateResponse) => void): grpcWeb.ClientReadableStream<chatterish_pb.UpdateResponse>;
+
+  updatePassword(
+    request: chatterish_pb.UpdatePasswordRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: chatterish_pb.UpdateResponse) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/chatterish.AuthService/UpdatePassword',
+        request,
+        metadata || {},
+        this.methodInfoUpdatePassword,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/chatterish.AuthService/UpdatePassword',
+    request,
+    metadata || {},
+    this.methodInfoUpdatePassword);
+  }
+
+  methodInfoUpdateEmail = new grpcWeb.MethodDescriptor(
+    '/chatterish.AuthService/UpdateEmail',
+    grpcWeb.MethodType.UNARY,
+    chatterish_pb.UpdateEmailRequest,
+    chatterish_pb.UpdateResponse,
+    (request: chatterish_pb.UpdateEmailRequest) => {
+      return request.serializeBinary();
+    },
+    chatterish_pb.UpdateResponse.deserializeBinary
+  );
+
+  updateEmail(
+    request: chatterish_pb.UpdateEmailRequest,
+    metadata: grpcWeb.Metadata | null): Promise<chatterish_pb.UpdateResponse>;
+
+  updateEmail(
+    request: chatterish_pb.UpdateEmailRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: chatterish_pb.UpdateResponse) => void): grpcWeb.ClientReadableStream<chatterish_pb.UpdateResponse>;
+
+  updateEmail(
+    request: chatterish_pb.UpdateEmailRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: chatterish_pb.UpdateResponse) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/chatterish.AuthService/UpdateEmail',
+        request,
+        metadata || {},
+        this.methodInfoUpdateEmail,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/chatterish.AuthService/UpdateEmail',
+    request,
+    metadata || {},
+    this.methodInfoUpdateEmail);
+  }
+
 }
 

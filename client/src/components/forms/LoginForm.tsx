@@ -23,7 +23,7 @@ const LoginForm = () => {
     return (
         <MainContentWrapper bg='bg-gray-900'>
             <div className='sm:px-5 xl:px-8 py-8 text-white'>
-                <h1 className='text-2xl mb-6 pb-4'>Login Form</h1>
+                <h1 className='text-2xl pb-4'>Login Form</h1>
                 <form onSubmit={handleSubmit} className='sm:p-4 xl:p-10'>
                     <div className='mb-4 flex flex-col xl:gap-3 overflow-hidden'>
                         <label

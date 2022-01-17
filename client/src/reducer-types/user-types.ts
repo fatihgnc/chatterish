@@ -5,6 +5,8 @@ export enum UserActionTypes {
     USER_SIGN_IN = 'USER_SIGN_IN',
     USER_SIGN_UP = 'USER_SIGN_UP',
     USER_LOG_OUT = 'USER_LOG_OUT',
+    USER_UPDATE_PASSWORD = 'USER_UPDATE_PASSWORD',
+    USER_UPDATE_EMAIL = 'USER_UPDATE_EMAIL',
 }
 
 export interface UserActionPayload {

@@ -28,3 +28,14 @@ export const handleLogout = (state: UserState, action: UserAction) => {
         isAuth: false,
     };
 };
+
+export const handleUpdate = (state: UserState, action: UserAction) => {
+    const user = action.payload?.user as UserModel;
+    const token = action.payload?.token as string;
+    saveTokenInLS(token);
+    return {
+        user,
+        token,
+        isAuth: state.isAuth,
+    };
+};

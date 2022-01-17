@@ -3,6 +3,78 @@ import * as jspb from 'google-protobuf'
 import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
 
 
+export class UpdatePasswordRequest extends jspb.Message {
+  getPassword(): string;
+  setPassword(value: string): UpdatePasswordRequest;
+
+  getConfirmpassword(): string;
+  setConfirmpassword(value: string): UpdatePasswordRequest;
+
+  getToken(): string;
+  setToken(value: string): UpdatePasswordRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdatePasswordRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdatePasswordRequest): UpdatePasswordRequest.AsObject;
+  static serializeBinaryToWriter(message: UpdatePasswordRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdatePasswordRequest;
+  static deserializeBinaryFromReader(message: UpdatePasswordRequest, reader: jspb.BinaryReader): UpdatePasswordRequest;
+}
+
+export namespace UpdatePasswordRequest {
+  export type AsObject = {
+    password: string,
+    confirmpassword: string,
+    token: string,
+  }
+}
+
+export class UpdateResponse extends jspb.Message {
+  getUser(): User | undefined;
+  setUser(value?: User): UpdateResponse;
+  hasUser(): boolean;
+  clearUser(): UpdateResponse;
+
+  getToken(): string;
+  setToken(value: string): UpdateResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdateResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdateResponse): UpdateResponse.AsObject;
+  static serializeBinaryToWriter(message: UpdateResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdateResponse;
+  static deserializeBinaryFromReader(message: UpdateResponse, reader: jspb.BinaryReader): UpdateResponse;
+}
+
+export namespace UpdateResponse {
+  export type AsObject = {
+    user?: User.AsObject,
+    token: string,
+  }
+}
+
+export class UpdateEmailRequest extends jspb.Message {
+  getEmail(): string;
+  setEmail(value: string): UpdateEmailRequest;
+
+  getToken(): string;
+  setToken(value: string): UpdateEmailRequest;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdateEmailRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdateEmailRequest): UpdateEmailRequest.AsObject;
+  static serializeBinaryToWriter(message: UpdateEmailRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdateEmailRequest;
+  static deserializeBinaryFromReader(message: UpdateEmailRequest, reader: jspb.BinaryReader): UpdateEmailRequest;
+}
+
+export namespace UpdateEmailRequest {
+  export type AsObject = {
+    email: string,
+    token: string,
+  }
+}
+
 export class User extends jspb.Message {
   getUsername(): string;
   setUsername(value: string): User;
