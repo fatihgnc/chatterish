@@ -7,6 +7,24 @@ package chatterish;
 service AuthService {
     rpc SignUserIn(UserCredentials) returns(SignInResponse) {};
     rpc SignUserUp(User) returns (google.protobuf.Empty) {};
+    rpc UpdatePassword(UpdatePasswordRequest) returns (UpdateResponse) {};
+    rpc UpdateEmail(UpdateEmailRequest) returns (UpdateResponse) {};
+}
+
+message UpdatePasswordRequest {
+    string password = 1;
+    string confirmPassword = 2;
+    string token = 3;
+}
+
+message UpdateResponse {
+    User user = 1;
+    string token = 2;
+}
+
+message UpdateEmailRequest {
+    string email = 1;
+    string token = 2;
 }
 
 message User {

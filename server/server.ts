@@ -4,6 +4,7 @@ import { ProtoGrpcType } from './proto/chatterish';
 import { AuthServiceHandlers } from './proto/chatterish/AuthService';
 import { connect } from 'mongoose';
 import { signUserInHandler, signUserUpHandler } from './apis/auth/auth';
+import { updateEmailHandler, updatePasswordHandler } from './apis/user/userApi';
 
 connect('mongodb://localhost:27017/chatterish', (err) => {
     if (err) return console.error(err);
@@ -43,4 +44,6 @@ server.bindAsync(
 server.addService(authService.service, {
     SignUserIn: signUserInHandler,
     SignUserUp: signUserUpHandler,
+    UpdatePassword: updatePasswordHandler,
+    UpdateEmail: updateEmailHandler,
 } as AuthServiceHandlers);
