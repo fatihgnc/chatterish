@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import UserContextProvider from './components/providers/UserProvider';
 import './index.css';
 
 const theme = createTheme({
@@ -16,9 +17,11 @@ const theme = createTheme({
 
 ReactDOM.render(
     <BrowserRouter>
-        <ThemeProvider theme={theme}>
-            <App />
-        </ThemeProvider>
+        <UserContextProvider>
+            <ThemeProvider theme={theme}>
+                <App />
+            </ThemeProvider>
+        </UserContextProvider>
     </BrowserRouter>,
     document.getElementById('root')
 );

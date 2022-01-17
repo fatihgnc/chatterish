@@ -40,28 +40,28 @@ export class AuthServiceClient {
     '/chatterish.AuthService/SignUserIn',
     grpcWeb.MethodType.UNARY,
     chatterish_pb.UserCredentials,
-    chatterish_pb.Token,
+    chatterish_pb.SignInResponse,
     (request: chatterish_pb.UserCredentials) => {
       return request.serializeBinary();
     },
-    chatterish_pb.Token.deserializeBinary
+    chatterish_pb.SignInResponse.deserializeBinary
   );
 
   signUserIn(
     request: chatterish_pb.UserCredentials,
-    metadata: grpcWeb.Metadata | null): Promise<chatterish_pb.Token>;
+    metadata: grpcWeb.Metadata | null): Promise<chatterish_pb.SignInResponse>;
 
   signUserIn(
     request: chatterish_pb.UserCredentials,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.RpcError,
-               response: chatterish_pb.Token) => void): grpcWeb.ClientReadableStream<chatterish_pb.Token>;
+               response: chatterish_pb.SignInResponse) => void): grpcWeb.ClientReadableStream<chatterish_pb.SignInResponse>;
 
   signUserIn(
     request: chatterish_pb.UserCredentials,
     metadata: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.RpcError,
-               response: chatterish_pb.Token) => void) {
+               response: chatterish_pb.SignInResponse) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +

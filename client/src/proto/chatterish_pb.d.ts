@@ -19,6 +19,9 @@ export class User extends jspb.Message {
   getNationality(): string;
   setNationality(value: string): User;
 
+  getConfirmpsw(): string;
+  setConfirmpsw(value: string): User;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): User.AsObject;
   static toObject(includeInstance: boolean, msg: User): User.AsObject;
@@ -34,24 +37,31 @@ export namespace User {
     email: string,
     birthdate: string,
     nationality: string,
+    confirmpsw: string,
   }
 }
 
-export class Token extends jspb.Message {
+export class SignInResponse extends jspb.Message {
   getToken(): string;
-  setToken(value: string): Token;
+  setToken(value: string): SignInResponse;
+
+  getUser(): User | undefined;
+  setUser(value?: User): SignInResponse;
+  hasUser(): boolean;
+  clearUser(): SignInResponse;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Token.AsObject;
-  static toObject(includeInstance: boolean, msg: Token): Token.AsObject;
-  static serializeBinaryToWriter(message: Token, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Token;
-  static deserializeBinaryFromReader(message: Token, reader: jspb.BinaryReader): Token;
+  toObject(includeInstance?: boolean): SignInResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: SignInResponse): SignInResponse.AsObject;
+  static serializeBinaryToWriter(message: SignInResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): SignInResponse;
+  static deserializeBinaryFromReader(message: SignInResponse, reader: jspb.BinaryReader): SignInResponse;
 }
 
-export namespace Token {
+export namespace SignInResponse {
   export type AsObject = {
     token: string,
+    user?: User.AsObject,
   }
 }
 

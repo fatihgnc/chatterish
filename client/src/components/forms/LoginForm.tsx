@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../providers/UserProvider';
 import MainContentWrapper from '../ui/MainContentWrapper';
 
 const LoginForm = () => {
+    const userCtx = useContext(UserContext);
+
     const [username, setUsername] = useState('');
     const [psw, setPsw] = useState('');
 
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        await userCtx.signIn(username, psw);
+
+        setUsername('');
+        setPsw('');
     };
 
     return (

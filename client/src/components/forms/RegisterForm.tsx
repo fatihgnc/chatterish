@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../providers/UserProvider';
 import MainContentWrapper from '../ui/MainContentWrapper';
 
 const RegisterForm = () => {
+    const userCtx = useContext(UserContext);
+
     const [username, setUsername] = useState('');
     const [psw, setPsw] = useState('');
     const [confPsw, setConfPsw] = useState('');
@@ -12,9 +15,28 @@ const RegisterForm = () => {
 
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(nationality);
+
+        try {
+            await userCtx.signUp(
+                username,
+                psw,
+                nationality,
+                birthdate,
+                email,
+                confPsw
+            );
+
+            setUsername('');
+            setPsw('');
+            setConfPsw('');
+            setEmail('');
+            setBirthdate('');
+            setNationality('Turkey');
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
@@ -45,7 +67,7 @@ const RegisterForm = () => {
                         <input
                             id='password'
                             type='password'
-                            placeholder='Enter your password...'
+                            placeholder='8-40 chars - at least 1 letter and number...'
                             onChange={(e) => setPsw(e.target.value)}
                             value={psw}
                             className='flex-1 w-full'
@@ -85,7 +107,7 @@ const RegisterForm = () => {
                         <label
                             htmlFor='birthdate'
                             className='text-white xl:text-lg sm:text-base sm:w-11/12 xl:w-1/12 sm:mb-2 xl:mb-0 min-w-fit'>
-                            Birth date
+                            Birthdate
                         </label>
                         <input
                             id='birthdate'
