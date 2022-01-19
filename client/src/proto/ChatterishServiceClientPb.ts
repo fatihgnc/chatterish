@@ -122,8 +122,72 @@ export class AuthServiceClient {
     this.methodInfoSignUserUp);
   }
 
+  methodInfoCheckToken = new grpcWeb.MethodDescriptor(
+    '/chatterish.AuthService/CheckToken',
+    grpcWeb.MethodType.UNARY,
+    chatterish_pb.Token,
+    google_protobuf_empty_pb.Empty,
+    (request: chatterish_pb.Token) => {
+      return request.serializeBinary();
+    },
+    google_protobuf_empty_pb.Empty.deserializeBinary
+  );
+
+  checkToken(
+    request: chatterish_pb.Token,
+    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+
+  checkToken(
+    request: chatterish_pb.Token,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+
+  checkToken(
+    request: chatterish_pb.Token,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: google_protobuf_empty_pb.Empty) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/chatterish.AuthService/CheckToken',
+        request,
+        metadata || {},
+        this.methodInfoCheckToken,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/chatterish.AuthService/CheckToken',
+    request,
+    metadata || {},
+    this.methodInfoCheckToken);
+  }
+
+}
+
+export class UserServiceClient {
+  client_: grpcWeb.AbstractClientBase;
+  hostname_: string;
+  credentials_: null | { [index: string]: string; };
+  options_: null | { [index: string]: any; };
+
+  constructor (hostname: string,
+               credentials?: null | { [index: string]: string; },
+               options?: null | { [index: string]: any; }) {
+    if (!options) options = {};
+    if (!credentials) credentials = {};
+    options['format'] = 'text';
+
+    this.client_ = new grpcWeb.GrpcWebClientBase(options);
+    this.hostname_ = hostname;
+    this.credentials_ = credentials;
+    this.options_ = options;
+  }
+
   methodInfoUpdatePassword = new grpcWeb.MethodDescriptor(
-    '/chatterish.AuthService/UpdatePassword',
+    '/chatterish.UserService/UpdatePassword',
     grpcWeb.MethodType.UNARY,
     chatterish_pb.UpdatePasswordRequest,
     chatterish_pb.UpdateResponse,
@@ -151,7 +215,7 @@ export class AuthServiceClient {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/chatterish.AuthService/UpdatePassword',
+          '/chatterish.UserService/UpdatePassword',
         request,
         metadata || {},
         this.methodInfoUpdatePassword,
@@ -159,14 +223,14 @@ export class AuthServiceClient {
     }
     return this.client_.unaryCall(
     this.hostname_ +
-      '/chatterish.AuthService/UpdatePassword',
+      '/chatterish.UserService/UpdatePassword',
     request,
     metadata || {},
     this.methodInfoUpdatePassword);
   }
 
   methodInfoUpdateEmail = new grpcWeb.MethodDescriptor(
-    '/chatterish.AuthService/UpdateEmail',
+    '/chatterish.UserService/UpdateEmail',
     grpcWeb.MethodType.UNARY,
     chatterish_pb.UpdateEmailRequest,
     chatterish_pb.UpdateResponse,
@@ -194,7 +258,7 @@ export class AuthServiceClient {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/chatterish.AuthService/UpdateEmail',
+          '/chatterish.UserService/UpdateEmail',
         request,
         metadata || {},
         this.methodInfoUpdateEmail,
@@ -202,7 +266,7 @@ export class AuthServiceClient {
     }
     return this.client_.unaryCall(
     this.hostname_ +
-      '/chatterish.AuthService/UpdateEmail',
+      '/chatterish.UserService/UpdateEmail',
     request,
     metadata || {},
     this.methodInfoUpdateEmail);

@@ -15,9 +15,6 @@ const LoginForm = () => {
         e.preventDefault();
 
         await userCtx.signIn(username, psw);
-
-        setUsername('');
-        setPsw('');
     };
 
     return (

@@ -1,4 +1,4 @@
-import React, { Reducer, useReducer } from 'react';
+import React, { Reducer, useEffect, useReducer } from 'react';
 import jwt_decode from 'jwt-decode';
 import {
     UserAction,
@@ -11,18 +11,23 @@ import {
     handleLogout,
     handleUpdate,
 } from '../../reducer-actions/user-actions';
-import { AuthServiceClient } from '../../proto/ChatterishServiceClientPb';
+import {
+    AuthServiceClient,
+    UserServiceClient,
+} from '../../proto/ChatterishServiceClientPb';
 import {
     UserCredentials,
     User,
     UpdatePasswordRequest,
     UpdateEmailRequest,
+    Token,
 } from '../../proto/chatterish_pb';
 import { UserModel } from '../../models/User';
 import { useNavigate } from 'react-router-dom';
 import { getTokenFromLS } from '../helpers/local-storage';
 
-const client = new AuthServiceClient('http://localhost:8080');
+const authClient = new AuthServiceClient('http://localhost:8080');
+const userClient = new UserServiceClient('http://localhost:8080');
 
 type UserContextObj = {
     isAuth: boolean;
@@ -101,6 +106,29 @@ const UserContextProvider: React.FC = (props) => {
         initialState
     );
 
+    useEffect(() => {
+        let interval: NodeJS.Timer;
+        if (state.token) {
+            interval = setInterval(async () => {
+                const checkTokenReq = new Token();
+                checkTokenReq.setToken(state.token as string);
+
+                try {
+                    await authClient.checkToken(checkTokenReq, null);
+                } catch (error) {
+                    console.log(error);
+                    dispatch({ type: UserActionTypes.USER_LOG_OUT });
+                    console.log('logged out because of an error');
+                    navigate('/login');
+                }
+            }, 5000);
+        }
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, [state.token, navigate]);
+
     console.log(state);
 
     const dispatchSignIn = async (
@@ -114,13 +142,14 @@ const UserContextProvider: React.FC = (props) => {
 
         try {
             const { token, user } = (
-                await client.signUserIn(signInRequestObj, null)
+                await authClient.signUserIn(signInRequestObj, null)
             ).toObject();
-            console.log(token, user);
+
             dispatch({
                 type: UserActionTypes.USER_SIGN_IN,
                 payload: { token, user },
             });
+
             navigate('/');
         } catch (error) {
             console.log('caught error in signinhandler');
@@ -146,7 +175,7 @@ const UserContextProvider: React.FC = (props) => {
         signUpRequestObj.setConfirmpsw(confirmPsw);
 
         try {
-            await client.signUserUp(signUpRequestObj, null);
+            await authClient.signUserUp(signUpRequestObj, null);
             dispatch({ type: UserActionTypes.USER_SIGN_UP });
             navigate('login');
             console.log('successfully registered');
@@ -167,7 +196,7 @@ const UserContextProvider: React.FC = (props) => {
 
         try {
             const { token, user } = (
-                await client.updatePassword(updatePasswordRequest, null)
+                await userClient.updatePassword(updatePasswordRequest, null)
             ).toObject();
             dispatch({
                 type: UserActionTypes.USER_UPDATE_PASSWORD,
@@ -187,7 +216,7 @@ const UserContextProvider: React.FC = (props) => {
 
         try {
             const { token, user } = (
-                await client.updateEmail(updateEmailReq, null)
+                await userClient.updateEmail(updateEmailReq, null)
             ).toObject();
             console.log(user);
             dispatch({
