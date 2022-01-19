@@ -117,8 +117,12 @@ const UserContextProvider: React.FC = (props) => {
 
                 try {
                     await authClient.checkToken(checkTokenReq, null);
-                } catch (error) {
-                    console.log(error);
+                } catch (error: any) {
+                    errCtx.setError(
+                        `${(
+                            error.message as string
+                        ).toUpperCase()}... You'll be logged out.`
+                    );
                     dispatch({ type: UserActionTypes.USER_LOG_OUT });
                     console.log('logged out because of an error');
                     navigate('/login');
@@ -129,7 +133,7 @@ const UserContextProvider: React.FC = (props) => {
         return () => {
             clearInterval(interval);
         };
-    }, [state.token, navigate]);
+    }, [state.token, navigate, errCtx]);
 
     console.log(state);
 
