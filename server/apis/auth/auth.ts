@@ -1,6 +1,6 @@
 import grpc from '@grpc/grpc-js';
 import jwt from 'jsonwebtoken';
-import { Token } from '../../proto/chatterish/Token';
+import { Token, Token__Output } from '../../proto/chatterish/Token';
 import { User__Output } from '../../proto/chatterish/User';
 import { UserCredentials__Output } from '../../proto/chatterish/UserCredentials';
 import { Empty } from '../../proto/google/protobuf/Empty';
@@ -99,7 +99,7 @@ export async function signUserInHandler(
             return res({ code: 400, message: 'Incorrect credentials!' });
 
         const token = jwt.sign({ ...userFromDb }, 'mykey', {
-            expiresIn: '10m',
+            expiresIn: '10s',
         });
 
         console.log('Signed in successfully!');
@@ -107,5 +107,18 @@ export async function signUserInHandler(
         res(null, { token, user: userFromDb });
     } catch (error) {
         throw error;
+    }
+}
+
+export async function checkToken(
+    call: grpc.ServerUnaryCall<Token__Output, Empty>,
+    res: grpc.sendUnaryData<Empty>
+) {
+    const { token } = call.request;
+    try {
+        jwt.verify(token as string, 'mykey');
+        res(null);
+    } catch (error: any) {
+        res({ code: 401, message: error.message });
     }
 }

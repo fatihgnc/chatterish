@@ -3,8 +3,13 @@ import * as loader from '@grpc/proto-loader';
 import { ProtoGrpcType } from './proto/chatterish';
 import { AuthServiceHandlers } from './proto/chatterish/AuthService';
 import { connect } from 'mongoose';
-import { signUserInHandler, signUserUpHandler } from './apis/auth/auth';
+import {
+    checkToken,
+    signUserInHandler,
+    signUserUpHandler,
+} from './apis/auth/auth';
 import { updateEmailHandler, updatePasswordHandler } from './apis/user/userApi';
+import { UserServiceHandlers } from './proto/chatterish/UserService';
 
 connect('mongodb://localhost:27017/chatterish', (err) => {
     if (err) return console.error(err);
@@ -27,6 +32,7 @@ const grpcObj = grpc.loadPackageDefinition(
 ) as unknown as ProtoGrpcType;
 
 const authService = grpcObj.chatterish.AuthService;
+const userService = grpcObj.chatterish.UserService;
 
 const server = new grpc.Server();
 
@@ -44,6 +50,10 @@ server.bindAsync(
 server.addService(authService.service, {
     SignUserIn: signUserInHandler,
     SignUserUp: signUserUpHandler,
-    UpdatePassword: updatePasswordHandler,
-    UpdateEmail: updateEmailHandler,
+    CheckToken: checkToken,
 } as AuthServiceHandlers);
+
+server.addService(userService.service, {
+    UpdateEmail: updateEmailHandler,
+    UpdatePassword: updatePasswordHandler,
+} as UserServiceHandlers);
