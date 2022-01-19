@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ErrorContext } from '../providers/ErrorProvider';
 import { UserContext } from '../providers/UserProvider';
 import MainContentWrapper from '../ui/MainContentWrapper';
 
 const RegisterForm = () => {
     const userCtx = useContext(UserContext);
+    const errCtx = useContext(ErrorContext);
 
     const [pswError, setPswError] = useState('');
     const [username, setUsername] = useState('');
@@ -32,16 +34,8 @@ const RegisterForm = () => {
                 email,
                 confPsw
             );
-
-            setPswError('');
-            setUsername('');
-            setPsw('');
-            setConfPsw('');
-            setEmail('');
-            setBirthdate('');
-            setNationality('Turkey');
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            errCtx.setError(error.message);
         }
     };
 
@@ -96,7 +90,9 @@ const RegisterForm = () => {
                             className='flex-1 w-full'
                         />
                         {pswError ? (
-                            <small className='text-red-300 inline-block mt-2'></small>
+                            <small className='text-red-300 inline-block mt-2'>
+                                Passwords do not match!
+                            </small>
                         ) : null}
                     </div>
                     <div className='mb-4 flex flex-col xl:gap-3 overflow-hidden'>

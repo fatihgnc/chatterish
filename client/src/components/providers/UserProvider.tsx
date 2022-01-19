@@ -1,4 +1,4 @@
-import React, { Reducer, useEffect, useReducer } from 'react';
+import React, { Reducer, useContext, useEffect, useReducer } from 'react';
 import jwt_decode from 'jwt-decode';
 import {
     UserAction,
@@ -25,6 +25,7 @@ import {
 import { UserModel } from '../../models/User';
 import { useNavigate } from 'react-router-dom';
 import { getTokenFromLS } from '../helpers/local-storage';
+import { ErrorContext } from './ErrorProvider';
 
 const authClient = new AuthServiceClient('http://localhost:8080');
 const userClient = new UserServiceClient('http://localhost:8080');
@@ -100,6 +101,7 @@ const reducerFn = (state: UserState, action: UserAction): UserState => {
 
 const UserContextProvider: React.FC = (props) => {
     const navigate = useNavigate();
+    const errCtx = useContext(ErrorContext);
 
     const [state, dispatch] = useReducer<Reducer<UserState, UserAction>>(
         reducerFn,
@@ -151,9 +153,9 @@ const UserContextProvider: React.FC = (props) => {
             });
 
             navigate('/');
-        } catch (error) {
-            console.log('caught error in signinhandler');
-            console.log(error);
+        } catch (error: any) {
+            console.log('caught error in sign in handler');
+            errCtx.setError(error.message);
         }
     };
 
@@ -179,7 +181,8 @@ const UserContextProvider: React.FC = (props) => {
             dispatch({ type: UserActionTypes.USER_SIGN_UP });
             navigate('login');
             console.log('successfully registered');
-        } catch (error) {
+        } catch (error: any) {
+            console.log('caught error in sign up handler');
             throw error;
         }
     };
@@ -203,8 +206,9 @@ const UserContextProvider: React.FC = (props) => {
                 payload: { token, user },
             });
             console.log('updated password');
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            console.log('error while updating password');
+            errCtx.setError(error.message);
         }
     };
 
@@ -224,8 +228,9 @@ const UserContextProvider: React.FC = (props) => {
                 payload: { token, user },
             });
             console.log('updated email successfully');
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            console.log('error while updating email');
+            errCtx.setError(error.message);
         }
     };
 
