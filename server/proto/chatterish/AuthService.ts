@@ -18,6 +18,15 @@ export interface AuthServiceClient extends grpc.Client {
   checkToken(argument: _chatterish_Token, options: grpc.CallOptions, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
   checkToken(argument: _chatterish_Token, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
   
+  RefreshToken(argument: _chatterish_Token, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_chatterish_Token__Output>): grpc.ClientUnaryCall;
+  RefreshToken(argument: _chatterish_Token, metadata: grpc.Metadata, callback: grpc.requestCallback<_chatterish_Token__Output>): grpc.ClientUnaryCall;
+  RefreshToken(argument: _chatterish_Token, options: grpc.CallOptions, callback: grpc.requestCallback<_chatterish_Token__Output>): grpc.ClientUnaryCall;
+  RefreshToken(argument: _chatterish_Token, callback: grpc.requestCallback<_chatterish_Token__Output>): grpc.ClientUnaryCall;
+  refreshToken(argument: _chatterish_Token, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_chatterish_Token__Output>): grpc.ClientUnaryCall;
+  refreshToken(argument: _chatterish_Token, metadata: grpc.Metadata, callback: grpc.requestCallback<_chatterish_Token__Output>): grpc.ClientUnaryCall;
+  refreshToken(argument: _chatterish_Token, options: grpc.CallOptions, callback: grpc.requestCallback<_chatterish_Token__Output>): grpc.ClientUnaryCall;
+  refreshToken(argument: _chatterish_Token, callback: grpc.requestCallback<_chatterish_Token__Output>): grpc.ClientUnaryCall;
+  
   SignUserIn(argument: _chatterish_UserCredentials, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_chatterish_SignInResponse__Output>): grpc.ClientUnaryCall;
   SignUserIn(argument: _chatterish_UserCredentials, metadata: grpc.Metadata, callback: grpc.requestCallback<_chatterish_SignInResponse__Output>): grpc.ClientUnaryCall;
   SignUserIn(argument: _chatterish_UserCredentials, options: grpc.CallOptions, callback: grpc.requestCallback<_chatterish_SignInResponse__Output>): grpc.ClientUnaryCall;
@@ -41,6 +50,8 @@ export interface AuthServiceClient extends grpc.Client {
 export interface AuthServiceHandlers extends grpc.UntypedServiceImplementation {
   CheckToken: grpc.handleUnaryCall<_chatterish_Token__Output, _google_protobuf_Empty>;
   
+  RefreshToken: grpc.handleUnaryCall<_chatterish_Token__Output, _chatterish_Token>;
+  
   SignUserIn: grpc.handleUnaryCall<_chatterish_UserCredentials__Output, _chatterish_SignInResponse>;
   
   SignUserUp: grpc.handleUnaryCall<_chatterish_User__Output, _google_protobuf_Empty>;
@@ -49,6 +60,7 @@ export interface AuthServiceHandlers extends grpc.UntypedServiceImplementation {
 
 export interface AuthServiceDefinition extends grpc.ServiceDefinition {
   CheckToken: MethodDefinition<_chatterish_Token, _google_protobuf_Empty, _chatterish_Token__Output, _google_protobuf_Empty__Output>
+  RefreshToken: MethodDefinition<_chatterish_Token, _chatterish_Token, _chatterish_Token__Output, _chatterish_Token__Output>
   SignUserIn: MethodDefinition<_chatterish_UserCredentials, _chatterish_SignInResponse, _chatterish_UserCredentials__Output, _chatterish_SignInResponse__Output>
   SignUserUp: MethodDefinition<_chatterish_User, _google_protobuf_Empty, _chatterish_User__Output, _google_protobuf_Empty__Output>
 }

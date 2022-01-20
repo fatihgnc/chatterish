@@ -5,6 +5,7 @@ import { AuthServiceHandlers } from './proto/chatterish/AuthService';
 import { connect } from 'mongoose';
 import {
     checkToken,
+    refreshToken,
     signUserInHandler,
     signUserUpHandler,
 } from './apis/auth/auth';
@@ -51,6 +52,7 @@ server.addService(authService.service, {
     SignUserIn: signUserInHandler,
     SignUserUp: signUserUpHandler,
     CheckToken: checkToken,
+    RefreshToken: refreshToken,
 } as AuthServiceHandlers);
 
 server.addService(userService.service, {

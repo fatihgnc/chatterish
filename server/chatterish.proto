@@ -8,6 +8,7 @@ service AuthService {
     rpc SignUserIn(UserCredentials) returns(SignInResponse) {};
     rpc SignUserUp(User) returns (google.protobuf.Empty) {};
     rpc CheckToken(Token) returns (google.protobuf.Empty) {};
+    rpc RefreshToken(Token) returns (Token) {};
 }
 
 service UserService {
