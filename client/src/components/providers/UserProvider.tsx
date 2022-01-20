@@ -43,12 +43,13 @@ type UserContextObj = {
         email: string,
         confirmPsw: string
     ) => Promise<void>;
+    logOut: () => Promise<void>;
     updatePassword: (
         password: string,
         confirmPassword: string
     ) => Promise<void>;
     updateEmail: (email: string) => Promise<void>;
-    logOut: () => Promise<void>;
+    refreshToken: () => Promise<void>;
 };
 
 export const UserContext = React.createContext<UserContextObj>({
@@ -60,6 +61,7 @@ export const UserContext = React.createContext<UserContextObj>({
     logOut: async () => {},
     updatePassword: async () => {},
     updateEmail: async () => {},
+    refreshToken: async () => {},
 });
 
 const token = getTokenFromLS();
@@ -117,6 +119,7 @@ const UserContextProvider: React.FC = (props) => {
 
                 try {
                     await authClient.checkToken(checkTokenReq, null);
+                    console.log('valid token');
                 } catch (error: any) {
                     errCtx.setError(
                         `${(
@@ -244,6 +247,25 @@ const UserContextProvider: React.FC = (props) => {
         navigate('/login');
     };
 
+    const refreshToken = async () => {
+        const refreshTokenReq = new Token();
+
+        refreshTokenReq.setToken(state.token as string);
+
+        try {
+            const { token: refreshedToken } = (
+                await authClient.refreshToken(refreshTokenReq, null)
+            ).toObject();
+
+            const refreshedUser = jwt_decode(refreshedToken) as UserModel;
+
+            state.token = refreshedToken;
+            state.user = refreshedUser as UserModel;
+        } catch (error: any) {
+            errCtx.setError(error.message);
+        }
+    };
+
     const ctxValue: UserContextObj = {
         user: state.user as UserModel,
         isAuth: state.isAuth,
@@ -253,6 +275,7 @@ const UserContextProvider: React.FC = (props) => {
         logOut: dispatchLogout,
         updatePassword: dispatchUpdatePassword,
         updateEmail: dispatchUpdateEmail,
+        refreshToken,
     };
 
     return (

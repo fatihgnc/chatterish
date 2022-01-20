@@ -301,9 +301,7 @@ const RegisterForm = () => {
                                 Lao People's Democratic Republic
                             </option>
                             <option value='Latvia'>Latvia</option>
-                            <option value='Lebanon' selected>
-                                Lebanon
-                            </option>
+                            <option value='Lebanon'>Lebanon</option>
                             <option value='Lesotho'>Lesotho</option>
                             <option value='Liberia'>Liberia</option>
                             <option value='Libyan Arab Jamahiriya'>

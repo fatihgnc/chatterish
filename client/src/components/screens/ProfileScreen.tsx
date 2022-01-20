@@ -11,7 +11,10 @@ const ProfileScreen = () => {
         if (!userCtx.isAuth) {
             navigate('/login');
         }
-    }, [userCtx.isAuth, navigate]);
+        (async () => {
+            await userCtx.refreshToken();
+        })();
+    }, [userCtx.isAuth, navigate, userCtx]);
 
     return (
         <MainContentWrapper bg='bg-gray-900'>

@@ -1,10 +1,23 @@
 import MainContentWrapper from '../ui/MainContentWrapper';
 import { Button } from '@mui/material';
 import { Shuffle } from '@mui/icons-material';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../providers/UserProvider';
+import { useNavigate } from 'react-router-dom';
 
 const MatchScreen = () => {
     const [isMatching, setIsMatching] = useState(false);
+    const userCtx = useContext(UserContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!userCtx.isAuth) {
+            navigate('/login');
+        }
+        (async () => {
+            await userCtx.refreshToken();
+        })();
+    }, [userCtx.isAuth, navigate, userCtx]);
 
     return (
         <MainContentWrapper bg='bg-none'>

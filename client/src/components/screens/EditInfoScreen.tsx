@@ -17,7 +17,10 @@ const EditInfoScreen = () => {
         if (!userCtx.isAuth) {
             navigate('/login');
         }
-    }, [userCtx.isAuth, navigate]);
+        (async () => {
+            await userCtx.refreshToken();
+        })();
+    }, [userCtx.isAuth, navigate, userCtx]);
 
     const [psw, setPsw] = useState('');
     const [confPsw, setConfPsw] = useState('');

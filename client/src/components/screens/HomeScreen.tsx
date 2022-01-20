@@ -1,11 +1,20 @@
 import { Start } from '@mui/icons-material';
-import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../providers/UserProvider';
 import MainContentWrapper from '../ui/MainContentWrapper';
 
 const HomeScreen = () => {
     const userCtx = useContext(UserContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (userCtx.isAuth) {
+            (async () => {
+                await userCtx.refreshToken();
+            })();
+        }
+    }, [userCtx.isAuth, navigate, userCtx]);
 
     const homeContent = userCtx.isAuth ? (
         <MainContentWrapper bg='bg-gray-900'>

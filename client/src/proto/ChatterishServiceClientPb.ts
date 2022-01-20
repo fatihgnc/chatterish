@@ -165,6 +165,49 @@ export class AuthServiceClient {
     this.methodInfoCheckToken);
   }
 
+  methodInfoRefreshToken = new grpcWeb.MethodDescriptor(
+    '/chatterish.AuthService/RefreshToken',
+    grpcWeb.MethodType.UNARY,
+    chatterish_pb.Token,
+    chatterish_pb.Token,
+    (request: chatterish_pb.Token) => {
+      return request.serializeBinary();
+    },
+    chatterish_pb.Token.deserializeBinary
+  );
+
+  refreshToken(
+    request: chatterish_pb.Token,
+    metadata: grpcWeb.Metadata | null): Promise<chatterish_pb.Token>;
+
+  refreshToken(
+    request: chatterish_pb.Token,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: chatterish_pb.Token) => void): grpcWeb.ClientReadableStream<chatterish_pb.Token>;
+
+  refreshToken(
+    request: chatterish_pb.Token,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: chatterish_pb.Token) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/chatterish.AuthService/RefreshToken',
+        request,
+        metadata || {},
+        this.methodInfoRefreshToken,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/chatterish.AuthService/RefreshToken',
+    request,
+    metadata || {},
+    this.methodInfoRefreshToken);
+  }
+
 }
 
 export class UserServiceClient {
