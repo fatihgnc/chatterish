@@ -1,17 +1,15 @@
 import grpc from '@grpc/grpc-js';
 import jwt from 'jsonwebtoken';
-import { Token, Token__Output } from '../../proto/chatterish/Token';
-import { User__Output } from '../../proto/chatterish/User';
-import { UserCredentials__Output } from '../../proto/chatterish/UserCredentials';
-import { Empty } from '../../proto/google/protobuf/Empty';
-import { userSchema } from '../../schemas/user-schema';
-import { User } from '../../models/user';
+import { Token, Token__Output } from '../proto/chatterish/Token';
+import { User__Output } from '../proto/chatterish/User';
+import { UserCredentials__Output } from '../proto/chatterish/UserCredentials';
+import { Empty } from '../proto/google/protobuf/Empty';
+import { userSchema } from '../schemas/user-schema';
+import { User } from '../models/user';
 import bcrypt from 'bcryptjs';
-import { SignInResponse } from '../../proto/chatterish/SignInResponse';
-import { RefreshTokenRequest__Output } from '../../proto/chatterish/RefreshTokenRequest';
-import { RefreshTokenResponse } from '../../proto/chatterish/RefreshTokenResponse';
-
-const onlineUsers = new Map();
+import { SignInResponse } from '../proto/chatterish/SignInResponse';
+import { RefreshTokenRequest__Output } from '../proto/chatterish/RefreshTokenRequest';
+import { RefreshTokenResponse } from '../proto/chatterish/RefreshTokenResponse';
 
 export async function signUserUpHandler(
     call: grpc.ServerUnaryCall<User__Output, Empty>,
@@ -102,9 +100,8 @@ export async function signUserInHandler(
         if (!didPasswordMatch)
             return res({ code: 400, message: 'Incorrect credentials!' });
 
-        console.log(userFromDb);
         const token = jwt.sign({ ...userFromDb }, 'mykey', {
-            expiresIn: '10s',
+            expiresIn: '10m',
         });
 
         console.log('Signed in successfully!');
@@ -146,9 +143,9 @@ export async function refreshToken(
     let newToken: string;
 
     if (user._doc) {
-        newToken = jwt.sign({ ...user._doc }, 'mykey', { expiresIn: '10s' });
+        newToken = jwt.sign({ ...user._doc }, 'mykey', { expiresIn: '10m' });
     } else {
-        newToken = jwt.sign({ ...user }, 'mykey', { expiresIn: '10s' });
+        newToken = jwt.sign({ ...user }, 'mykey', { expiresIn: '10m' });
     }
 
     res(null, { token: newToken });

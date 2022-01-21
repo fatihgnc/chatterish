@@ -8,9 +8,11 @@ import {
     refreshToken,
     signUserInHandler,
     signUserUpHandler,
-} from './apis/auth/auth';
-import { updateEmailHandler, updatePasswordHandler } from './apis/user/userApi';
+} from './controllers/auth';
+import { updateEmailHandler, updatePasswordHandler } from './controllers/user';
 import { UserServiceHandlers } from './proto/chatterish/UserService';
+import { ChatServiceHandlers } from './proto/chatterish/ChatService';
+import { receiveMessageHandler, sendMessageHandler } from './controllers/chat';
 
 connect('mongodb://localhost:27017/chatterish', (err) => {
     if (err) return console.error(err);
@@ -34,6 +36,7 @@ const grpcObj = grpc.loadPackageDefinition(
 
 const authService = grpcObj.chatterish.AuthService;
 const userService = grpcObj.chatterish.UserService;
+const chatService = grpcObj.chatterish.ChatService;
 
 const server = new grpc.Server();
 
@@ -59,3 +62,8 @@ server.addService(userService.service, {
     UpdateEmail: updateEmailHandler,
     UpdatePassword: updatePasswordHandler,
 } as UserServiceHandlers);
+
+server.addService(chatService.service, {
+    ReceiveMessage: receiveMessageHandler,
+    SendMessage: sendMessageHandler,
+} as ChatServiceHandlers);

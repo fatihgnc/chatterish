@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import grpc from '@grpc/grpc-js';
-import { UpdatePasswordRequest__Output } from '../../proto/chatterish/UpdatePasswordRequest';
-import { UpdateResponse } from '../../proto/chatterish/UpdateResponse';
-import { User } from '../../models/user';
+import { UpdatePasswordRequest__Output } from '../proto/chatterish/UpdatePasswordRequest';
+import { UpdateResponse } from '../proto/chatterish/UpdateResponse';
+import { User } from '../models/user';
 import bcrypt from 'bcryptjs';
-import { UpdateEmailRequest__Output } from '../../proto/chatterish/UpdateEmailRequest';
+import { UpdateEmailRequest__Output } from '../proto/chatterish/UpdateEmailRequest';
 
 export async function updatePasswordHandler(
     call: grpc.ServerUnaryCall<UpdatePasswordRequest__Output, UpdateResponse>,
