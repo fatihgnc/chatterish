@@ -4,6 +4,6 @@
 
 @layer components {
     input {
-        @apply outline-none border-b sm:px-2 xl:px-6 py-3 bg-gray-800 border-green-300 border-solid text-base text-white tracking-widest sm:text-xs lg:text-lg;
+        @apply outline-none border-b sm:px-3 xl:px-6 py-3 bg-gray-800 border-green-300 border-solid text-base text-white tracking-widest sm:text-xs lg:text-lg;
     }
 }
