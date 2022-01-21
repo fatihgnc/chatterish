@@ -177,3 +177,47 @@ export namespace Token {
   }
 }
 
+export class Username extends jspb.Message {
+  getUsername(): string;
+  setUsername(value: string): Username;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Username.AsObject;
+  static toObject(includeInstance: boolean, msg: Username): Username.AsObject;
+  static serializeBinaryToWriter(message: Username, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Username;
+  static deserializeBinaryFromReader(message: Username, reader: jspb.BinaryReader): Username;
+}
+
+export namespace Username {
+  export type AsObject = {
+    username: string,
+  }
+}
+
+export class ChatMessage extends jspb.Message {
+  getMsg(): string;
+  setMsg(value: string): ChatMessage;
+
+  getSender(): string;
+  setSender(value: string): ChatMessage;
+
+  getTime(): string;
+  setTime(value: string): ChatMessage;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ChatMessage.AsObject;
+  static toObject(includeInstance: boolean, msg: ChatMessage): ChatMessage.AsObject;
+  static serializeBinaryToWriter(message: ChatMessage, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ChatMessage;
+  static deserializeBinaryFromReader(message: ChatMessage, reader: jspb.BinaryReader): ChatMessage;
+}
+
+export namespace ChatMessage {
+  export type AsObject = {
+    msg: string,
+    sender: string,
+    time: string,
+  }
+}
+

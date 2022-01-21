@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import ChatContextProvider from './components/providers/ChatProvider';
 import ErrorContextProvider from './components/providers/ErrorProvider';
 import UserContextProvider from './components/providers/UserProvider';
 import './index.css';
@@ -20,9 +21,11 @@ ReactDOM.render(
     <BrowserRouter>
         <ErrorContextProvider>
             <UserContextProvider>
-                <ThemeProvider theme={theme}>
-                    <App />
-                </ThemeProvider>
+                <ChatContextProvider>
+                    <ThemeProvider theme={theme}>
+                        <App />
+                    </ThemeProvider>
+                </ChatContextProvider>
             </UserContextProvider>
         </ErrorContextProvider>
     </BrowserRouter>,

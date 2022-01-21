@@ -317,3 +317,89 @@ export class UserServiceClient {
 
 }
 
+export class ChatServiceClient {
+  client_: grpcWeb.AbstractClientBase;
+  hostname_: string;
+  credentials_: null | { [index: string]: string; };
+  options_: null | { [index: string]: any; };
+
+  constructor (hostname: string,
+               credentials?: null | { [index: string]: string; },
+               options?: null | { [index: string]: any; }) {
+    if (!options) options = {};
+    if (!credentials) credentials = {};
+    options['format'] = 'text';
+
+    this.client_ = new grpcWeb.GrpcWebClientBase(options);
+    this.hostname_ = hostname;
+    this.credentials_ = credentials;
+    this.options_ = options;
+  }
+
+  methodInfoReceiveMessage = new grpcWeb.MethodDescriptor(
+    '/chatterish.ChatService/ReceiveMessage',
+    grpcWeb.MethodType.SERVER_STREAMING,
+    chatterish_pb.Username,
+    chatterish_pb.ChatMessage,
+    (request: chatterish_pb.Username) => {
+      return request.serializeBinary();
+    },
+    chatterish_pb.ChatMessage.deserializeBinary
+  );
+
+  receiveMessage(
+    request: chatterish_pb.Username,
+    metadata?: grpcWeb.Metadata) {
+    return this.client_.serverStreaming(
+      this.hostname_ +
+        '/chatterish.ChatService/ReceiveMessage',
+      request,
+      metadata || {},
+      this.methodInfoReceiveMessage);
+  }
+
+  methodInfoSendMessage = new grpcWeb.MethodDescriptor(
+    '/chatterish.ChatService/SendMessage',
+    grpcWeb.MethodType.UNARY,
+    chatterish_pb.ChatMessage,
+    google_protobuf_empty_pb.Empty,
+    (request: chatterish_pb.ChatMessage) => {
+      return request.serializeBinary();
+    },
+    google_protobuf_empty_pb.Empty.deserializeBinary
+  );
+
+  sendMessage(
+    request: chatterish_pb.ChatMessage,
+    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+
+  sendMessage(
+    request: chatterish_pb.ChatMessage,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+
+  sendMessage(
+    request: chatterish_pb.ChatMessage,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: google_protobuf_empty_pb.Empty) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/chatterish.ChatService/SendMessage',
+        request,
+        metadata || {},
+        this.methodInfoSendMessage,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/chatterish.ChatService/SendMessage',
+    request,
+    metadata || {},
+    this.methodInfoSendMessage);
+  }
+
+}
+
