@@ -112,7 +112,7 @@ const UserContextProvider: React.FC = (props) => {
 
     useEffect(() => {
         let interval: NodeJS.Timer;
-        if (state.token) {
+        if (state.token && state.isAuth) {
             interval = setInterval(async () => {
                 const checkTokenReq = new Token();
                 checkTokenReq.setToken(state.token as string);
@@ -136,7 +136,7 @@ const UserContextProvider: React.FC = (props) => {
         return () => {
             clearInterval(interval);
         };
-    }, [state.token, navigate, errCtx]);
+    }, [state.token, navigate, errCtx, state.isAuth]);
 
     console.log(state);
 
