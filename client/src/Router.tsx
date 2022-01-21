@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import ChatScreen from './components/screens/ChatScreen';
 import EditInfoScreen from './components/screens/EditInfoScreen';
 import HomeScreen from './components/screens/HomeScreen';
 import LoginScreen from './components/screens/LoginScreen';
@@ -19,6 +20,7 @@ const Router = () => {
                 <Route path='register' element={<RegisterScreen />} />
                 <Route path='userInfo' element={<UserInfoScreen />} />
                 <Route path='editProfile' element={<EditInfoScreen />} />
+                <Route path='chat' element={<ChatScreen />} />
             </Route>
         </Routes>
     );
