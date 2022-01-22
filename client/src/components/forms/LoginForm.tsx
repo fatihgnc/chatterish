@@ -57,9 +57,7 @@ const LoginForm = () => {
                             onClick={(e) => navigate('/register')}>
                             Don't have an account? <strong>Register</strong>
                         </button>
-                        <button
-                            type='submit'
-                            className='bg-white text-black px-3 py-2 font-semibold tracking-widest mt-4 sm:text-sm xl:text-base'>
+                        <button className='bg-white text-black px-3 py-2 font-semibold tracking-widest mt-4 sm:text-sm xl:text-base'>
                             Login
                         </button>
                     </div>
