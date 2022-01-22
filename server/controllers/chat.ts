@@ -24,7 +24,7 @@ export async function receiveMessageHandler(
     messageStreamByUsername.set(username as string, call);
 
     call.on('cancelled', () => {
-        messageStreamByUsername.delete(username);
+        messageStreamByUsername.delete(username as string);
     });
 }
 
