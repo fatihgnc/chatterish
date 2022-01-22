@@ -14,7 +14,7 @@ const messageStreamByUsername = new Map<
 export async function receiveMessageHandler(
     call: grpc.ServerWritableStream<Username__Output, ChatMessage>
 ) {
-    console.log('receive handler!!');
+    console.log('receive message handler!!');
     const { username } = call.request;
 
     if (!username) {
@@ -22,10 +22,6 @@ export async function receiveMessageHandler(
     }
 
     messageStreamByUsername.set(username as string, call);
-
-    call.on('cancelled', () => {
-        messageStreamByUsername.delete(username as string);
-    });
 }
 
 export async function sendMessageHandler(
