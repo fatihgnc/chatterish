@@ -14,7 +14,7 @@ const ChatScreen = () => {
 
     useEffect(() => {
         if (!userCtx.isAuth) {
-            navigate('/login');
+            return navigate('/login');
         }
 
         (async () => {

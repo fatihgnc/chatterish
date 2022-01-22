@@ -12,12 +12,23 @@ const MatchScreen = () => {
 
     useEffect(() => {
         if (!userCtx.isAuth) {
-            navigate('/login');
+            return navigate('/login');
         }
+
+        userCtx.addUserToMatchPool();
+
         (async () => {
-            await userCtx.refreshToken();
+            try {
+                await userCtx.refreshToken();
+            } catch (error) {
+                console.log(error);
+            }
         })();
-    }, [userCtx.isAuth, navigate, userCtx]);
+
+        return () => {
+            userCtx.removeUserFromMatchPool();
+        };
+    }, [userCtx.isAuth, navigate, userCtx, isMatching]);
 
     return (
         <MainContentWrapper bg='bg-none'>
@@ -25,6 +36,7 @@ const MatchScreen = () => {
                 <span className='sm:text-base xl:text-2xl font-semibold'>
                     {isMatching ? 'Matching...' : 'Start Matching!'}
                 </span>
+                {/* <span>Currently Matching: {userCtx.matchingUsersCount}</span> */}
                 <Button
                     onClick={(e) => setIsMatching((prevState) => !prevState)}
                     startIcon={!isMatching ? <Shuffle /> : null}

@@ -9,10 +9,14 @@ const ProfileScreen = () => {
 
     useEffect(() => {
         if (!userCtx.isAuth) {
-            navigate('/login');
+            return navigate('/login');
         }
         (async () => {
-            await userCtx.refreshToken();
+            try {
+                await userCtx.refreshToken();
+            } catch (error) {
+                console.log(error);
+            }
         })();
     }, [userCtx.isAuth, navigate, userCtx]);
 

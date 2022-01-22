@@ -11,7 +11,11 @@ const HomeScreen = () => {
     useEffect(() => {
         if (userCtx.isAuth) {
             (async () => {
-                await userCtx.refreshToken();
+                try {
+                    await userCtx.refreshToken();
+                } catch (error) {
+                    console.log(error);
+                }
             })();
         }
     }, [userCtx.isAuth, navigate, userCtx]);
