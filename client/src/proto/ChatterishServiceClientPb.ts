@@ -315,6 +315,92 @@ export class UserServiceClient {
     this.methodInfoUpdateEmail);
   }
 
+  methodInfoAddUserToMatchPool = new grpcWeb.MethodDescriptor(
+    '/chatterish.UserService/AddUserToMatchPool',
+    grpcWeb.MethodType.UNARY,
+    chatterish_pb.Username,
+    google_protobuf_empty_pb.Empty,
+    (request: chatterish_pb.Username) => {
+      return request.serializeBinary();
+    },
+    google_protobuf_empty_pb.Empty.deserializeBinary
+  );
+
+  addUserToMatchPool(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+
+  addUserToMatchPool(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+
+  addUserToMatchPool(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: google_protobuf_empty_pb.Empty) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/chatterish.UserService/AddUserToMatchPool',
+        request,
+        metadata || {},
+        this.methodInfoAddUserToMatchPool,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/chatterish.UserService/AddUserToMatchPool',
+    request,
+    metadata || {},
+    this.methodInfoAddUserToMatchPool);
+  }
+
+  methodInfoRemoveUserFromMatchPool = new grpcWeb.MethodDescriptor(
+    '/chatterish.UserService/RemoveUserFromMatchPool',
+    grpcWeb.MethodType.UNARY,
+    chatterish_pb.Username,
+    google_protobuf_empty_pb.Empty,
+    (request: chatterish_pb.Username) => {
+      return request.serializeBinary();
+    },
+    google_protobuf_empty_pb.Empty.deserializeBinary
+  );
+
+  removeUserFromMatchPool(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+
+  removeUserFromMatchPool(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+
+  removeUserFromMatchPool(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: google_protobuf_empty_pb.Empty) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/chatterish.UserService/RemoveUserFromMatchPool',
+        request,
+        metadata || {},
+        this.methodInfoRemoveUserFromMatchPool,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/chatterish.UserService/RemoveUserFromMatchPool',
+    request,
+    metadata || {},
+    this.methodInfoRemoveUserFromMatchPool);
+  }
+
 }
 
 export class ChatServiceClient {

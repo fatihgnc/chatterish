@@ -21,6 +21,7 @@ import {
     UpdatePasswordRequest,
     UpdateEmailRequest,
     Token,
+    Username,
 } from '../../proto/chatterish_pb';
 import { UserModel } from '../../models/User';
 import { useNavigate } from 'react-router-dom';
@@ -50,6 +51,8 @@ type UserContextObj = {
     ) => Promise<void>;
     updateEmail: (email: string) => Promise<void>;
     refreshToken: () => Promise<void>;
+    addUserToMatchPool: () => void;
+    removeUserFromMatchPool: () => void;
 };
 
 export const UserContext = React.createContext<UserContextObj>({
@@ -62,6 +65,8 @@ export const UserContext = React.createContext<UserContextObj>({
     updatePassword: async () => {},
     updateEmail: async () => {},
     refreshToken: async () => {},
+    addUserToMatchPool: () => {},
+    removeUserFromMatchPool: () => {},
 });
 
 const token = getTokenFromLS();
@@ -105,6 +110,8 @@ const UserContextProvider: React.FC = (props) => {
     const navigate = useNavigate();
     const errCtx = useContext(ErrorContext);
 
+    // const [matchingUsersCount, setMatchingUsersCount] = useState(0);
+
     const [state, dispatch] = useReducer<Reducer<UserState, UserAction>>(
         reducerFn,
         initialState
@@ -112,6 +119,7 @@ const UserContextProvider: React.FC = (props) => {
 
     useEffect(() => {
         let interval: NodeJS.Timer;
+
         if (state.token && state.isAuth) {
             interval = setInterval(async () => {
                 const checkTokenReq = new Token();
@@ -131,12 +139,34 @@ const UserContextProvider: React.FC = (props) => {
                     navigate('/login');
                 }
             }, 5000);
+
+            // const matchingUsersStreamReq = new Username();
+
+            // matchingUsersStreamReq.setUsername(state.user?.username as string);
+
+            // const matchingUsersStream = userClient.matchingUsersCountStream(
+            //     matchingUsersStreamReq
+            // );
+
+            // matchingUsersStream.on('data', (chunk: any) => {
+            //     const countObj = chunk.toObject();
+            //     console.log(chunk.toObject());
+            //     setMatchingUsersCount(countObj.currentlymatchinguserscount);
+            // });
+
+            // matchingUsersStream.on('end', () => {
+            //     console.log('ended stream');
+            // });
+
+            // matchingUsersStream.on('error', (err) => {
+            //     console.log(err);
+            // });
         }
 
         return () => {
             clearInterval(interval);
         };
-    }, [state.token, navigate, errCtx, state.isAuth]);
+    }, [state.token, navigate, errCtx, state.isAuth, state.user?.username]);
 
     console.log(state);
 
@@ -266,6 +296,33 @@ const UserContextProvider: React.FC = (props) => {
         }
     };
 
+    const addUserToMatchPool = async () => {
+        const addUserToPoolReq = new Username();
+
+        addUserToPoolReq.setUsername(state.user?.username as string);
+
+        try {
+            await userClient.addUserToMatchPool(addUserToPoolReq, null);
+        } catch (error: any) {
+            errCtx.setError(error.message);
+        }
+    };
+
+    const removeUserFromMatchPool = async () => {
+        const removeUserFromPoolReq = new Username();
+
+        removeUserFromPoolReq.setUsername(state.user?.username as string);
+
+        try {
+            await userClient.removeUserFromMatchPool(
+                removeUserFromPoolReq,
+                null
+            );
+        } catch (error: any) {
+            errCtx.setError(error.message);
+        }
+    };
+
     const ctxValue: UserContextObj = {
         user: state.user as UserModel,
         isAuth: state.isAuth,
@@ -276,6 +333,8 @@ const UserContextProvider: React.FC = (props) => {
         updatePassword: dispatchUpdatePassword,
         updateEmail: dispatchUpdateEmail,
         refreshToken,
+        addUserToMatchPool,
+        removeUserFromMatchPool,
     };
 
     return (

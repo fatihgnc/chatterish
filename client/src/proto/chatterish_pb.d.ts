@@ -221,3 +221,21 @@ export namespace ChatMessage {
   }
 }
 
+export class MatchersCount extends jspb.Message {
+  getCurrentlymatchinguserscount(): number;
+  setCurrentlymatchinguserscount(value: number): MatchersCount;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): MatchersCount.AsObject;
+  static toObject(includeInstance: boolean, msg: MatchersCount): MatchersCount.AsObject;
+  static serializeBinaryToWriter(message: MatchersCount, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): MatchersCount;
+  static deserializeBinaryFromReader(message: MatchersCount, reader: jspb.BinaryReader): MatchersCount;
+}
+
+export namespace MatchersCount {
+  export type AsObject = {
+    currentlymatchinguserscount: number,
+  }
+}
+

@@ -4,7 +4,7 @@ import {
     Person,
     Shuffle,
     Login,
-    AppRegistration,
+    PersonAddRounded,
 } from '@mui/icons-material';
 import { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -82,7 +82,7 @@ const Nav = () => {
                         : 'bg-neutral-100 flex gap-2 text-black p-4 ease-in-out duration-300 transition-all cursor-pointer rounded-full'
                 }
                 title='go register page'>
-                <AppRegistration />
+                <PersonAddRounded />
             </NavLink>
         </nav>
     );
