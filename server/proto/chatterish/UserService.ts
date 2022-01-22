@@ -2,11 +2,31 @@
 
 import type * as grpc from '@grpc/grpc-js'
 import type { MethodDefinition } from '@grpc/proto-loader'
+import type { Empty as _google_protobuf_Empty, Empty__Output as _google_protobuf_Empty__Output } from '../google/protobuf/Empty';
 import type { UpdateEmailRequest as _chatterish_UpdateEmailRequest, UpdateEmailRequest__Output as _chatterish_UpdateEmailRequest__Output } from '../chatterish/UpdateEmailRequest';
 import type { UpdatePasswordRequest as _chatterish_UpdatePasswordRequest, UpdatePasswordRequest__Output as _chatterish_UpdatePasswordRequest__Output } from '../chatterish/UpdatePasswordRequest';
 import type { UpdateResponse as _chatterish_UpdateResponse, UpdateResponse__Output as _chatterish_UpdateResponse__Output } from '../chatterish/UpdateResponse';
+import type { Username as _chatterish_Username, Username__Output as _chatterish_Username__Output } from '../chatterish/Username';
 
 export interface UserServiceClient extends grpc.Client {
+  AddUserToMatchPool(argument: _chatterish_Username, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  AddUserToMatchPool(argument: _chatterish_Username, metadata: grpc.Metadata, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  AddUserToMatchPool(argument: _chatterish_Username, options: grpc.CallOptions, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  AddUserToMatchPool(argument: _chatterish_Username, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  addUserToMatchPool(argument: _chatterish_Username, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  addUserToMatchPool(argument: _chatterish_Username, metadata: grpc.Metadata, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  addUserToMatchPool(argument: _chatterish_Username, options: grpc.CallOptions, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  addUserToMatchPool(argument: _chatterish_Username, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  
+  RemoveUserFromMatchPool(argument: _chatterish_Username, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  RemoveUserFromMatchPool(argument: _chatterish_Username, metadata: grpc.Metadata, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  RemoveUserFromMatchPool(argument: _chatterish_Username, options: grpc.CallOptions, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  RemoveUserFromMatchPool(argument: _chatterish_Username, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  removeUserFromMatchPool(argument: _chatterish_Username, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  removeUserFromMatchPool(argument: _chatterish_Username, metadata: grpc.Metadata, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  removeUserFromMatchPool(argument: _chatterish_Username, options: grpc.CallOptions, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  removeUserFromMatchPool(argument: _chatterish_Username, callback: grpc.requestCallback<_google_protobuf_Empty__Output>): grpc.ClientUnaryCall;
+  
   UpdateEmail(argument: _chatterish_UpdateEmailRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_chatterish_UpdateResponse__Output>): grpc.ClientUnaryCall;
   UpdateEmail(argument: _chatterish_UpdateEmailRequest, metadata: grpc.Metadata, callback: grpc.requestCallback<_chatterish_UpdateResponse__Output>): grpc.ClientUnaryCall;
   UpdateEmail(argument: _chatterish_UpdateEmailRequest, options: grpc.CallOptions, callback: grpc.requestCallback<_chatterish_UpdateResponse__Output>): grpc.ClientUnaryCall;
@@ -28,6 +48,10 @@ export interface UserServiceClient extends grpc.Client {
 }
 
 export interface UserServiceHandlers extends grpc.UntypedServiceImplementation {
+  AddUserToMatchPool: grpc.handleUnaryCall<_chatterish_Username__Output, _google_protobuf_Empty>;
+  
+  RemoveUserFromMatchPool: grpc.handleUnaryCall<_chatterish_Username__Output, _google_protobuf_Empty>;
+  
   UpdateEmail: grpc.handleUnaryCall<_chatterish_UpdateEmailRequest__Output, _chatterish_UpdateResponse>;
   
   UpdatePassword: grpc.handleUnaryCall<_chatterish_UpdatePasswordRequest__Output, _chatterish_UpdateResponse>;
@@ -35,6 +59,8 @@ export interface UserServiceHandlers extends grpc.UntypedServiceImplementation {
 }
 
 export interface UserServiceDefinition extends grpc.ServiceDefinition {
+  AddUserToMatchPool: MethodDefinition<_chatterish_Username, _google_protobuf_Empty, _chatterish_Username__Output, _google_protobuf_Empty__Output>
+  RemoveUserFromMatchPool: MethodDefinition<_chatterish_Username, _google_protobuf_Empty, _chatterish_Username__Output, _google_protobuf_Empty__Output>
   UpdateEmail: MethodDefinition<_chatterish_UpdateEmailRequest, _chatterish_UpdateResponse, _chatterish_UpdateEmailRequest__Output, _chatterish_UpdateResponse__Output>
   UpdatePassword: MethodDefinition<_chatterish_UpdatePasswordRequest, _chatterish_UpdateResponse, _chatterish_UpdatePasswordRequest__Output, _chatterish_UpdateResponse__Output>
 }

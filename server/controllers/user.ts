@@ -5,6 +5,16 @@ import { UpdateResponse } from '../proto/chatterish/UpdateResponse';
 import { User } from '../models/user';
 import bcrypt from 'bcryptjs';
 import { UpdateEmailRequest__Output } from '../proto/chatterish/UpdateEmailRequest';
+import { Username__Output } from '../proto/chatterish/Username';
+import { MatchersCount } from '../proto/chatterish/MatchersCount';
+import { Empty } from '../proto/google/protobuf/Empty';
+
+const matchPool: { username: string }[] = [];
+
+// const matchersCountStreamByUsername = new Map<
+//     string,
+//     grpc.ServerWritableStream<Username__Output, MatchersCount>
+// >();
 
 export async function updatePasswordHandler(
     call: grpc.ServerUnaryCall<UpdatePasswordRequest__Output, UpdateResponse>,
@@ -98,4 +108,47 @@ export async function updateEmailHandler(
     } catch (error: any) {
         return res({ code: 500, message: error.message });
     }
+}
+
+// export function matchingUsersCountHandler(
+//     call: grpc.ServerWritableStream<Username__Output, MatchersCount>
+// ) {
+//     console.log('users count stream req handler');
+//     const { username } = call.request;
+//     matchersCountStreamByUsername.set(username as string, call);
+// }
+
+export function addUserToMatchPoolHandler(
+    call: grpc.ServerUnaryCall<Username__Output, Empty>,
+    res: grpc.sendUnaryData<Empty>
+) {
+    const { username } = call.request;
+
+    matchPool.push({ username: username as string });
+
+    // matchersCountStreamByUsername.forEach((call) =>
+    //     call.write({ currentlyMatchingUsersCount: matchPool.length })
+    // );
+
+    console.log('added:' + JSON.stringify(matchPool));
+
+    res(null);
+}
+
+export function removeUserFromMatchPoolHandler(
+    call: grpc.ServerUnaryCall<Username__Output, Empty>,
+    res: grpc.sendUnaryData<Empty>
+) {
+    const { username } = call.request;
+
+    const userIndex = matchPool.findIndex((user) => user.username === username);
+
+    matchPool.splice(userIndex, 1);
+    console.log('removed: ' + JSON.stringify(matchPool));
+
+    // matchersCountStreamByUsername.forEach((call) =>
+    //     call.write({ currentlyMatchingUsersCount: matchPool.length })
+    // );
+
+    res(null);
 }

@@ -14,6 +14,7 @@ export interface ProtoGrpcType {
     AuthService: SubtypeConstructor<typeof grpc.Client, _chatterish_AuthServiceClient> & { service: _chatterish_AuthServiceDefinition }
     ChatMessage: MessageTypeDefinition
     ChatService: SubtypeConstructor<typeof grpc.Client, _chatterish_ChatServiceClient> & { service: _chatterish_ChatServiceDefinition }
+    MatchersCount: MessageTypeDefinition
     SignInResponse: MessageTypeDefinition
     Token: MessageTypeDefinition
     UpdateEmailRequest: MessageTypeDefinition

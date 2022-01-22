@@ -14,6 +14,8 @@ service AuthService {
 service UserService {
     rpc UpdatePassword(UpdatePasswordRequest) returns (UpdateResponse) {};
     rpc UpdateEmail(UpdateEmailRequest) returns (UpdateResponse) {};
+    rpc AddUserToMatchPool(Username) returns (google.protobuf.Empty) {};
+    rpc RemoveUserFromMatchPool(Username) returns (google.protobuf.Empty) {};
 }
 
 service ChatService {
@@ -69,3 +71,8 @@ message ChatMessage {
     string sender = 2;
     string time = 3;
 }
+
+message MatchersCount {
+    int32 currentlyMatchingUsersCount = 1;
+}
+

@@ -9,7 +9,12 @@ import {
     signUserInHandler,
     signUserUpHandler,
 } from './controllers/auth';
-import { updateEmailHandler, updatePasswordHandler } from './controllers/user';
+import {
+    addUserToMatchPoolHandler,
+    removeUserFromMatchPoolHandler,
+    updateEmailHandler,
+    updatePasswordHandler,
+} from './controllers/user';
 import { UserServiceHandlers } from './proto/chatterish/UserService';
 import { ChatServiceHandlers } from './proto/chatterish/ChatService';
 import { receiveMessageHandler, sendMessageHandler } from './controllers/chat';
@@ -61,6 +66,8 @@ server.addService(authService.service, {
 server.addService(userService.service, {
     UpdateEmail: updateEmailHandler,
     UpdatePassword: updatePasswordHandler,
+    AddUserToMatchPool: addUserToMatchPoolHandler,
+    RemoveUserFromMatchPool: removeUserFromMatchPoolHandler,
 } as UserServiceHandlers);
 
 server.addService(chatService.service, {
