@@ -1,4 +1,10 @@
-import React, { Reducer, useContext, useEffect, useReducer } from 'react';
+import React, {
+    Reducer,
+    useContext,
+    useEffect,
+    useReducer,
+    useState,
+} from 'react';
 import jwt_decode from 'jwt-decode';
 import {
     UserAction,
@@ -22,6 +28,7 @@ import {
     UpdateEmailRequest,
     Token,
     Username,
+    MatchType,
 } from '../../proto/chatterish_pb';
 import { UserModel } from '../../models/User';
 import { useNavigate } from 'react-router-dom';
@@ -35,6 +42,8 @@ type UserContextObj = {
     isAuth: boolean;
     user: UserModel | null;
     token: string | null;
+    sender: string;
+    receiver: string;
     signIn: (usernameOrEmail: string, password: string) => Promise<void>;
     signUp: (
         username: string,
@@ -53,12 +62,16 @@ type UserContextObj = {
     refreshToken: () => Promise<void>;
     addUserToMatchPool: () => void;
     removeUserFromMatchPool: () => void;
+    matchUser: () => Promise<void>;
+    getMatches: () => Promise<MatchType.AsObject[] | undefined>;
 };
 
 export const UserContext = React.createContext<UserContextObj>({
     isAuth: false,
     user: null,
     token: '',
+    sender: '',
+    receiver: '',
     signIn: async () => {},
     signUp: async () => {},
     logOut: async () => {},
@@ -67,6 +80,8 @@ export const UserContext = React.createContext<UserContextObj>({
     refreshToken: async () => {},
     addUserToMatchPool: () => {},
     removeUserFromMatchPool: () => {},
+    matchUser: async () => {},
+    getMatches: async () => undefined,
 });
 
 const token = getTokenFromLS();
@@ -111,6 +126,8 @@ const UserContextProvider: React.FC = (props) => {
     const errCtx = useContext(ErrorContext);
 
     // const [matchingUsersCount, setMatchingUsersCount] = useState(0);
+    const [sender, setSender] = useState('');
+    const [receiver, setReceiver] = useState('');
 
     const [state, dispatch] = useReducer<Reducer<UserState, UserAction>>(
         reducerFn,
@@ -139,28 +156,6 @@ const UserContextProvider: React.FC = (props) => {
                     navigate('/login');
                 }
             }, 5000);
-
-            // const matchingUsersStreamReq = new Username();
-
-            // matchingUsersStreamReq.setUsername(state.user?.username as string);
-
-            // const matchingUsersStream = userClient.matchingUsersCountStream(
-            //     matchingUsersStreamReq
-            // );
-
-            // matchingUsersStream.on('data', (chunk: any) => {
-            //     const countObj = chunk.toObject();
-            //     console.log(chunk.toObject());
-            //     setMatchingUsersCount(countObj.currentlymatchinguserscount);
-            // });
-
-            // matchingUsersStream.on('end', () => {
-            //     console.log('ended stream');
-            // });
-
-            // matchingUsersStream.on('error', (err) => {
-            //     console.log(err);
-            // });
         }
 
         return () => {
@@ -168,7 +163,7 @@ const UserContextProvider: React.FC = (props) => {
         };
     }, [state.token, navigate, errCtx, state.isAuth, state.user?.username]);
 
-    console.log(state);
+    // console.log(state);
 
     const dispatchSignIn = async (
         usernameOrEmail: string,
@@ -323,10 +318,45 @@ const UserContextProvider: React.FC = (props) => {
         }
     };
 
+    const matchUser = async () => {
+        const matchUserReq = new Username();
+        matchUserReq.setUsername(state.user?.username as string);
+
+        try {
+            const { receiver, sender } = (
+                await userClient.matchUser(matchUserReq, null)
+            ).toObject();
+
+            setSender(sender);
+            setReceiver(receiver);
+
+            console.log(sender, receiver);
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const getMatches = async () => {
+        const getMatchesReq = new Username();
+        getMatchesReq.setUsername(state.user?.username as string);
+
+        try {
+            const { matchesList } = (
+                await userClient.getMatches(getMatchesReq, null)
+            ).toObject();
+
+            return matchesList;
+        } catch (error: any) {
+            errCtx.setError(error.message);
+        }
+    };
+
     const ctxValue: UserContextObj = {
         user: state.user as UserModel,
         isAuth: state.isAuth,
         token: state.token,
+        sender,
+        receiver,
         signIn: dispatchSignIn,
         signUp: dispatchSignUp,
         logOut: dispatchLogout,
@@ -335,6 +365,8 @@ const UserContextProvider: React.FC = (props) => {
         refreshToken,
         addUserToMatchPool,
         removeUserFromMatchPool,
+        matchUser,
+        getMatches,
     };
 
     return (

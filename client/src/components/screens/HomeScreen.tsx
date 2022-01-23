@@ -1,12 +1,12 @@
 import { Start } from '@mui/icons-material';
-import { useContext, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { UserContext } from '../providers/UserProvider';
 import MainContentWrapper from '../ui/MainContentWrapper';
 
 const HomeScreen = () => {
     const userCtx = useContext(UserContext);
-    const navigate = useNavigate();
+    const [matches, setMatches] = useState<any[]>([]);
 
     useEffect(() => {
         if (userCtx.isAuth) {
@@ -16,9 +16,13 @@ const HomeScreen = () => {
                 } catch (error) {
                     console.log(error);
                 }
+
+                const matches = await userCtx.getMatches();
+                if (!matches) return;
+                setMatches(matches);
             })();
         }
-    }, [userCtx.isAuth, navigate, userCtx]);
+    }, [userCtx]);
 
     const homeContent = userCtx.isAuth ? (
         <MainContentWrapper bg='bg-gray-900'>
@@ -28,39 +32,21 @@ const HomeScreen = () => {
                 </h1>
                 <div className='rounded-sm w-auto h-4/5 overflow-y-auto'>
                     <div className='overflow-x-hidden px-8 py-4'>
-                        <div className='mb-2'>
-                            <p className='text-xl'>
-                                You matched with{' '}
-                                <span className='text-blue-500 font-semibold cursor-pointer'>
-                                    Jarren Smith
-                                </span>
-                            </p>
-                            <small className='text-gray-400 text-base'>
-                                17.7.2022
-                            </small>
-                        </div>
-                        <div className='mb-2'>
-                            <p className='text-xl'>
-                                You matched with{' '}
-                                <span className='text-blue-500 font-semibold cursor-pointer'>
-                                    Jarren Smith
-                                </span>
-                            </p>
-                            <small className='text-gray-400 text-base'>
-                                17.7.2022
-                            </small>
-                        </div>
-                        <div className='mb-2'>
-                            <p className='text-xl'>
-                                You matched with{' '}
-                                <span className='text-blue-500 font-semibold cursor-pointer'>
-                                    Jarren Smith
-                                </span>
-                            </p>
-                            <small className='text-gray-400 text-base'>
-                                17.7.2022
-                            </small>
-                        </div>
+                        {matches.length > 0
+                            ? matches.map((match, idx) => (
+                                  <div className='mb-3' key={idx}>
+                                      <p className='text-xl'>
+                                          You matched with{' '}
+                                          <span className='text-blue-500 font-semibold cursor-pointer'>
+                                              {match.username}
+                                          </span>
+                                      </p>
+                                      <small className='text-gray-400 text-base'>
+                                          {match.date}
+                                      </small>
+                                  </div>
+                              ))
+                            : null}
                     </div>
                 </div>
             </div>

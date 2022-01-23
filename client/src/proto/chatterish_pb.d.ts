@@ -202,6 +202,9 @@ export class ChatMessage extends jspb.Message {
   getSender(): string;
   setSender(value: string): ChatMessage;
 
+  getReceiver(): string;
+  setReceiver(value: string): ChatMessage;
+
   getTime(): string;
   setTime(value: string): ChatMessage;
 
@@ -217,6 +220,7 @@ export namespace ChatMessage {
   export type AsObject = {
     msg: string,
     sender: string,
+    receiver: string,
     time: string,
   }
 }
@@ -236,6 +240,70 @@ export class MatchersCount extends jspb.Message {
 export namespace MatchersCount {
   export type AsObject = {
     currentlymatchinguserscount: number,
+  }
+}
+
+export class Match extends jspb.Message {
+  getSender(): string;
+  setSender(value: string): Match;
+
+  getReceiver(): string;
+  setReceiver(value: string): Match;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Match.AsObject;
+  static toObject(includeInstance: boolean, msg: Match): Match.AsObject;
+  static serializeBinaryToWriter(message: Match, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Match;
+  static deserializeBinaryFromReader(message: Match, reader: jspb.BinaryReader): Match;
+}
+
+export namespace Match {
+  export type AsObject = {
+    sender: string,
+    receiver: string,
+  }
+}
+
+export class MatchType extends jspb.Message {
+  getUsername(): string;
+  setUsername(value: string): MatchType;
+
+  getDate(): string;
+  setDate(value: string): MatchType;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): MatchType.AsObject;
+  static toObject(includeInstance: boolean, msg: MatchType): MatchType.AsObject;
+  static serializeBinaryToWriter(message: MatchType, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): MatchType;
+  static deserializeBinaryFromReader(message: MatchType, reader: jspb.BinaryReader): MatchType;
+}
+
+export namespace MatchType {
+  export type AsObject = {
+    username: string,
+    date: string,
+  }
+}
+
+export class GetMatchesResponse extends jspb.Message {
+  getMatchesList(): Array<MatchType>;
+  setMatchesList(value: Array<MatchType>): GetMatchesResponse;
+  clearMatchesList(): GetMatchesResponse;
+  addMatches(value?: MatchType, index?: number): MatchType;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMatchesResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMatchesResponse): GetMatchesResponse.AsObject;
+  static serializeBinaryToWriter(message: GetMatchesResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMatchesResponse;
+  static deserializeBinaryFromReader(message: GetMatchesResponse, reader: jspb.BinaryReader): GetMatchesResponse;
+}
+
+export namespace GetMatchesResponse {
+  export type AsObject = {
+    matchesList: Array<MatchType.AsObject>,
   }
 }
 

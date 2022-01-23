@@ -10,6 +10,7 @@ type ChatContextObj = {
     sendMessage: (
         message: string,
         sender: string,
+        receiver: string,
         time: string
     ) => Promise<void>;
 };
@@ -42,7 +43,8 @@ const ChatContextProvider: React.FC = (props) => {
                     const msg = new Message(
                         msgObj.sender,
                         msgObj.time,
-                        msgObj.msg
+                        msgObj.msg,
+                        msgObj.receiver
                     );
 
                     setMessages((prevMessages) => [...prevMessages, msg]);
@@ -58,6 +60,7 @@ const ChatContextProvider: React.FC = (props) => {
     const sendMessage = async (
         message: string,
         sender: string,
+        receiver: string,
         time: string
     ) => {
         const sendMessageReq = new ChatMessage();
@@ -65,6 +68,7 @@ const ChatContextProvider: React.FC = (props) => {
         sendMessageReq.setMsg(message);
         sendMessageReq.setSender(sender);
         sendMessageReq.setTime(time);
+        sendMessageReq.setReceiver(receiver);
 
         try {
             console.log('sending message');

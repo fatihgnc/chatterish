@@ -401,6 +401,92 @@ export class UserServiceClient {
     this.methodInfoRemoveUserFromMatchPool);
   }
 
+  methodInfoMatchUser = new grpcWeb.MethodDescriptor(
+    '/chatterish.UserService/MatchUser',
+    grpcWeb.MethodType.UNARY,
+    chatterish_pb.Username,
+    chatterish_pb.Match,
+    (request: chatterish_pb.Username) => {
+      return request.serializeBinary();
+    },
+    chatterish_pb.Match.deserializeBinary
+  );
+
+  matchUser(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null): Promise<chatterish_pb.Match>;
+
+  matchUser(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: chatterish_pb.Match) => void): grpcWeb.ClientReadableStream<chatterish_pb.Match>;
+
+  matchUser(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: chatterish_pb.Match) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/chatterish.UserService/MatchUser',
+        request,
+        metadata || {},
+        this.methodInfoMatchUser,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/chatterish.UserService/MatchUser',
+    request,
+    metadata || {},
+    this.methodInfoMatchUser);
+  }
+
+  methodInfoGetMatches = new grpcWeb.MethodDescriptor(
+    '/chatterish.UserService/GetMatches',
+    grpcWeb.MethodType.UNARY,
+    chatterish_pb.Username,
+    chatterish_pb.GetMatchesResponse,
+    (request: chatterish_pb.Username) => {
+      return request.serializeBinary();
+    },
+    chatterish_pb.GetMatchesResponse.deserializeBinary
+  );
+
+  getMatches(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null): Promise<chatterish_pb.GetMatchesResponse>;
+
+  getMatches(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: chatterish_pb.GetMatchesResponse) => void): grpcWeb.ClientReadableStream<chatterish_pb.GetMatchesResponse>;
+
+  getMatches(
+    request: chatterish_pb.Username,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: chatterish_pb.GetMatchesResponse) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/chatterish.UserService/GetMatches',
+        request,
+        metadata || {},
+        this.methodInfoGetMatches,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/chatterish.UserService/GetMatches',
+    request,
+    metadata || {},
+    this.methodInfoGetMatches);
+  }
+
 }
 
 export class ChatServiceClient {

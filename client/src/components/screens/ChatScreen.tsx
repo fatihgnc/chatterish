@@ -1,4 +1,4 @@
-import { Send } from '@mui/icons-material';
+import { Close, Send } from '@mui/icons-material';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ChatMessage from '../chat/ChatMessage';
@@ -9,7 +9,9 @@ import MainContentWrapper from '../ui/MainContentWrapper';
 const ChatScreen = () => {
     const userCtx = useContext(UserContext);
     const chatCtx = useContext(ChatContext);
+
     const [message, setMessage] = useState('');
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -28,13 +30,21 @@ const ChatScreen = () => {
 
     return (
         <MainContentWrapper bg='bg-gray-900'>
+            <div className='bg-gray-800 text-white py-4 px-6 font-semibold sm:text-sm lg:text-lg tracking-wider relative'>
+                chatting with{' '}
+                <span className='text-blue-500 tracking-widest'>
+                    {userCtx.receiver}
+                </span>
+                <button
+                    className='cursor-pointer flex items-center justify-center absolute top-[50%] translate-y-[-50%] right-5'
+                    onClick={(e) => {
+                        userCtx.removeUserFromMatchPool();
+                        navigate('/');
+                    }}>
+                    <Close />
+                </button>
+            </div>
             <div className='h-[65vh] overflow-y-auto'>
-                <div className='bg-gray-800 text-white py-4 px-6 font-semibold sm:text-sm lg:text-lg tracking-wider'>
-                    chatting with{' '}
-                    <span className='text-blue-500 tracking-widest'>
-                        fatihthebach61
-                    </span>
-                </div>
                 <div className='bg-gray-900 p-5 text-white'>
                     {chatCtx.messages.length > 0
                         ? chatCtx.messages.map((messageObj, index) => {
@@ -66,7 +76,8 @@ const ChatScreen = () => {
                         const localeDate = date.toLocaleTimeString();
                         await chatCtx.sendMessage(
                             message,
-                            userCtx.user?.username as string,
+                            userCtx.sender as string,
+                            userCtx.receiver as string,
                             localeDate
                         );
 

@@ -23,11 +23,16 @@ const MatchScreen = () => {
             } catch (error) {
                 console.log(error);
             }
-        })();
 
-        return () => {
-            userCtx.removeUserFromMatchPool();
-        };
+            if (isMatching) {
+                try {
+                    await userCtx.matchUser();
+                    navigate('/chat');
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        })();
     }, [userCtx.isAuth, navigate, userCtx, isMatching]);
 
     return (
