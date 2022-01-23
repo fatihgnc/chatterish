@@ -32,21 +32,29 @@ const HomeScreen = () => {
                 </h1>
                 <div className='rounded-sm w-auto h-4/5 overflow-y-auto'>
                     <div className='overflow-x-hidden px-8 py-4'>
-                        {matches.length > 0
-                            ? matches.map((match, idx) => (
-                                  <div className='mb-3' key={idx}>
-                                      <p className='text-xl'>
-                                          You matched with{' '}
-                                          <span className='text-blue-500 font-semibold cursor-pointer'>
-                                              {match.username}
-                                          </span>
-                                      </p>
-                                      <small className='text-gray-400 text-base'>
-                                          {match.date}
-                                      </small>
-                                  </div>
-                              ))
-                            : null}
+                        {matches.length > 0 ? (
+                            matches.map((match, idx) => (
+                                <div className='mb-3' key={idx}>
+                                    <p className='text-xl'>
+                                        You matched with{' '}
+                                        <span className='text-blue-500 font-semibold cursor-pointer'>
+                                            {match.username}
+                                        </span>
+                                    </p>
+                                    <small className='text-gray-400 text-base'>
+                                        {match.date}
+                                    </small>
+                                </div>
+                            ))
+                        ) : (
+                            <span className='sm:text-base lg:text-xl'>
+                                You don't have any matches yet,
+                                <Link to='/match' className='text-blue-500'>
+                                    {' '}
+                                    click to start matching.
+                                </Link>
+                            </span>
+                        )}
                     </div>
                 </div>
             </div>
