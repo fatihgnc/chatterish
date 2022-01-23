@@ -15,6 +15,12 @@ const ChatScreen = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        return () => {
+            userCtx.removeUserFromMatchPool();
+        };
+    }, []);
+
+    useEffect(() => {
         if (!userCtx.isAuth) {
             return navigate('/login');
         }
@@ -38,7 +44,6 @@ const ChatScreen = () => {
                 <button
                     className='cursor-pointer flex items-center justify-center absolute top-[50%] translate-y-[-50%] right-5'
                     onClick={(e) => {
-                        userCtx.removeUserFromMatchPool();
                         navigate('/');
                     }}>
                     <Close />

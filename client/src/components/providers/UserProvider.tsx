@@ -332,7 +332,7 @@ const UserContextProvider: React.FC = (props) => {
 
             console.log(sender, receiver);
         } catch (error: any) {
-            console.log(error);
+            throw error;
         }
     };
 

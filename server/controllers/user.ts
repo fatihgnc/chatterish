@@ -150,8 +150,11 @@ export function removeUserFromMatchPoolHandler(
 
     const userIndex = matchPool.findIndex((user) => user.username === username);
 
-    matchPool.splice(userIndex, 1);
-    console.log('removed: ' + JSON.stringify(matchPool));
+    if (userIndex !== -1) {
+        matchPool[userIndex].isMatching = false;
+    }
+
+    console.log('changed to false: ' + JSON.stringify(matchPool));
 
     // matchersCountStreamByUsername.forEach((call) =>
     //     call.write({ currentlyMatchingUsersCount: matchPool.length })
@@ -179,44 +182,42 @@ export async function matchUserHandler(
     matchPool[senderIndex].isMatching = true;
     console.log(matchPool);
 
-    setTimeout(async () => {
-        while (true) {
-            const receiverCandidateIndex = Math.floor(
-                Math.random() * matchPool.length
-            );
+    const int = setInterval(async () => {
+        const receiverCandidateIndex = Math.floor(
+            Math.random() * matchPool.length
+        );
 
-            const receiverCandidate = matchPool[receiverCandidateIndex];
+        const receiverCandidate = matchPool[receiverCandidateIndex];
 
-            if (
+        if (
+            !(
                 !receiverCandidate ||
                 receiverCandidate.isMatching === false ||
                 receiverCandidate.username === username
-            ) {
-                continue;
-            } else {
-                console.log('Match Pool: ' + JSON.stringify(matchPool));
-                console.log('Receiver: ' + JSON.stringify(receiverCandidate));
+            )
+        ) {
+            console.log('Match Pool: ' + JSON.stringify(matchPool));
+            console.log('Receiver: ' + JSON.stringify(receiverCandidate));
 
-                try {
-                    const user = await User.findOne({ username }).exec();
-                    user.matches.push({
-                        username: receiverCandidate.username,
-                        date: new Date().toISOString(),
-                    });
-                    await user.save();
-                } catch (error) {
-                    console.log(error);
-                }
-
-                matchPool[receiverCandidateIndex].isMatching = false;
-                matchPool[senderIndex].isMatching = false;
-                return res(null, {
-                    receiver: receiverCandidate.username,
-                    sender: username,
+            try {
+                const user = await User.findOne({ username }).exec();
+                user.matches.push({
+                    username: receiverCandidate.username,
+                    date: new Date().toISOString(),
                 });
+                await user.save();
+            } catch (error) {
+                console.log(error);
             }
+
+            clearInterval(int);
+
+            return res(null, {
+                receiver: receiverCandidate.username,
+                sender: username,
+            });
         }
-    }, 3000);
+    }, 1500);
 }
 
 export async function getMatchesHandler(
@@ -227,7 +228,6 @@ export async function getMatchesHandler(
 
     try {
         const user = await User.findOne({ username }).exec();
-        console.log(user.matches);
         res(null, { matches: user.matches });
     } catch (error: any) {
         res({ code: 500, message: error.message });

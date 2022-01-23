@@ -30,7 +30,7 @@ const HomeScreen = () => {
                 <h1 className='font-semibold text-2xl px-3 py-2'>
                     Match history
                 </h1>
-                <div className='rounded-sm w-auto h-4/5 overflow-y-auto'>
+                <div className='rounded-sm w-auto h-full overflow-y-auto'>
                     <div className='overflow-x-hidden px-8 py-4'>
                         {matches.length > 0 ? (
                             matches.map((match, idx) => (

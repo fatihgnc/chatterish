@@ -15,22 +15,15 @@ const MatchScreen = () => {
             return navigate('/login');
         }
 
-        userCtx.addUserToMatchPool();
+        if (!isMatching) {
+            userCtx.addUserToMatchPool();
+        }
 
         (async () => {
             try {
                 await userCtx.refreshToken();
             } catch (error) {
                 console.log(error);
-            }
-
-            if (isMatching) {
-                try {
-                    await userCtx.matchUser();
-                    navigate('/chat');
-                } catch (error) {
-                    console.log(error);
-                }
             }
         })();
     }, [userCtx.isAuth, navigate, userCtx, isMatching]);
@@ -43,7 +36,25 @@ const MatchScreen = () => {
                 </span>
                 {/* <span>Currently Matching: {userCtx.matchingUsersCount}</span> */}
                 <Button
-                    onClick={(e) => setIsMatching((prevState) => !prevState)}
+                    onClick={async (e) => {
+                        setIsMatching((prevState) => !prevState);
+
+                        if (!isMatching) {
+                            try {
+                                await userCtx.matchUser();
+                                console.log('matched');
+                                navigate('/chat');
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        } else {
+                            try {
+                                userCtx.removeUserFromMatchPool();
+                            } catch (error: any) {
+                                console.log(error.message);
+                            }
+                        }
+                    }}
                     startIcon={!isMatching ? <Shuffle /> : null}
                     variant='contained'
                     color='primary'
