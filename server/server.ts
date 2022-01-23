@@ -11,6 +11,8 @@ import {
 } from './controllers/auth';
 import {
     addUserToMatchPoolHandler,
+    getMatchesHandler,
+    matchUserHandler,
     removeUserFromMatchPoolHandler,
     updateEmailHandler,
     updatePasswordHandler,
@@ -68,6 +70,8 @@ server.addService(userService.service, {
     UpdatePassword: updatePasswordHandler,
     AddUserToMatchPool: addUserToMatchPoolHandler,
     RemoveUserFromMatchPool: removeUserFromMatchPoolHandler,
+    MatchUser: matchUserHandler,
+    GetMatches: getMatchesHandler,
 } as UserServiceHandlers);
 
 server.addService(chatService.service, {

@@ -29,17 +29,19 @@ export async function sendMessageHandler(
     res: grpc.sendUnaryData<Empty>
 ) {
     console.log('caught send message request!!!');
-    const { msg, sender, time } = call.request;
+    const { msg, sender, time, receiver } = call.request;
 
-    if (!msg || !sender || !time) {
+    if (!msg || !sender || !time || !receiver) {
         return res({
             code: 400,
             message: 'Message is required!',
         });
     }
 
-    messageStreamByUsername.forEach((call) => {
-        call.write({ msg, sender, time });
+    messageStreamByUsername.forEach((call, username) => {
+        if (username === sender || username === receiver) {
+            call.write({ msg, sender, receiver, time });
+        }
     });
 
     res(null, {});

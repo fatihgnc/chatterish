@@ -6,10 +6,11 @@ import { User } from '../models/user';
 import bcrypt from 'bcryptjs';
 import { UpdateEmailRequest__Output } from '../proto/chatterish/UpdateEmailRequest';
 import { Username__Output } from '../proto/chatterish/Username';
-import { MatchersCount } from '../proto/chatterish/MatchersCount';
 import { Empty } from '../proto/google/protobuf/Empty';
+import { Match } from '../proto/chatterish/Match';
+import { GetMatchesResponse } from '../proto/chatterish/GetMatchesResponse';
 
-const matchPool: { username: string }[] = [];
+const matchPool: { username: string; isMatching: boolean }[] = [];
 
 // const matchersCountStreamByUsername = new Map<
 //     string,
@@ -124,7 +125,13 @@ export function addUserToMatchPoolHandler(
 ) {
     const { username } = call.request;
 
-    matchPool.push({ username: username as string });
+    const userIndex = matchPool.findIndex((user) => user.username === username);
+
+    if (userIndex !== -1) {
+        matchPool.splice(userIndex, 1);
+    }
+
+    matchPool.push({ username: username as string, isMatching: false });
 
     // matchersCountStreamByUsername.forEach((call) =>
     //     call.write({ currentlyMatchingUsersCount: matchPool.length })
@@ -151,4 +158,78 @@ export function removeUserFromMatchPoolHandler(
     // );
 
     res(null);
+}
+
+export async function matchUserHandler(
+    call: grpc.ServerUnaryCall<Username__Output, Match>,
+    res: grpc.sendUnaryData<Match>
+) {
+    console.log('caught match user handler');
+
+    const { username } = call.request;
+
+    const senderIndex = matchPool.findIndex(
+        (user) => user.username === username
+    );
+
+    if (senderIndex === -1) {
+        return res({ code: 400, message: 'you are not in the pool' });
+    }
+
+    matchPool[senderIndex].isMatching = true;
+    console.log(matchPool);
+
+    setTimeout(async () => {
+        while (true) {
+            const receiverCandidateIndex = Math.floor(
+                Math.random() * matchPool.length
+            );
+
+            const receiverCandidate = matchPool[receiverCandidateIndex];
+
+            if (
+                !receiverCandidate ||
+                receiverCandidate.isMatching === false ||
+                receiverCandidate.username === username
+            ) {
+                continue;
+            } else {
+                console.log('Match Pool: ' + JSON.stringify(matchPool));
+                console.log('Receiver: ' + JSON.stringify(receiverCandidate));
+
+                try {
+                    const user = await User.findOne({ username }).exec();
+                    user.matches.push({
+                        username: receiverCandidate.username,
+                        date: new Date().toISOString(),
+                    });
+                    await user.save();
+                } catch (error) {
+                    console.log(error);
+                }
+
+                matchPool[receiverCandidateIndex].isMatching = false;
+                matchPool[senderIndex].isMatching = false;
+                return res(null, {
+                    receiver: receiverCandidate.username,
+                    sender: username,
+                });
+            }
+        }
+    }, 3000);
+}
+
+export async function getMatchesHandler(
+    call: grpc.ServerUnaryCall<Username__Output, GetMatchesResponse>,
+    res: grpc.sendUnaryData<GetMatchesResponse>
+) {
+    const { username } = call.request;
+
+    try {
+        const user = await User.findOne({ username }).exec();
+        console.log(user.matches);
+        res(null, { matches: user.matches });
+    } catch (error: any) {
+        res({ code: 500, message: error.message });
+    }
 }

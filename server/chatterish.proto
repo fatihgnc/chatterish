@@ -16,6 +16,8 @@ service UserService {
     rpc UpdateEmail(UpdateEmailRequest) returns (UpdateResponse) {};
     rpc AddUserToMatchPool(Username) returns (google.protobuf.Empty) {};
     rpc RemoveUserFromMatchPool(Username) returns (google.protobuf.Empty) {};
+    rpc MatchUser(Username) returns (Match) {};
+    rpc GetMatches(Username) returns (GetMatchesResponse) {};
 }
 
 service ChatService {
@@ -69,10 +71,24 @@ message Username {
 message ChatMessage {
     string msg = 1;
     string sender = 2;
-    string time = 3;
+    string receiver = 3;
+    string time = 4;
 }
 
 message MatchersCount {
     int32 currentlyMatchingUsersCount = 1;
 }
 
+message Match {
+    string sender = 1;
+    string receiver = 2;
+}
+
+message MatchType {
+    string username = 1;
+    string date = 2;
+}
+
+message GetMatchesResponse {
+    repeated MatchType matches = 1;
+}
