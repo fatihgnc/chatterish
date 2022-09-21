@@ -8,145 +8,139 @@ import { userSchema } from '../schemas/user-schema';
 import { User } from '../models/user';
 import bcrypt from 'bcryptjs';
 import { SignInResponse } from '../proto/chatterish/SignInResponse';
-import { RefreshTokenRequest__Output } from '../proto/chatterish/RefreshTokenRequest';
-import { RefreshTokenResponse } from '../proto/chatterish/RefreshTokenResponse';
 
 export async function signUserUpHandler(
-    call: grpc.ServerUnaryCall<User__Output, Empty>,
-    res: grpc.sendUnaryData<Empty>
+  call: grpc.ServerUnaryCall<User__Output, Empty>,
+  res: grpc.sendUnaryData<Empty>
 ): Promise<void> {
-    console.log('caught sign up call!!!!');
-    const { birthdate, email, nationality, password, username, confirmPsw } =
-        call.request;
+  console.log('caught sign up call!!!!');
+  const { birthdate, email, nationality, password, username, confirmPsw } =
+    call.request;
 
-    if (
-        !birthdate ||
-        !email ||
-        !nationality ||
-        !password ||
-        !username ||
-        !confirmPsw
-    )
-        return res({
-            code: 400,
-            message:
-                'Username, password, email, nationality and password are all required fields!',
-        });
+  if (
+    !birthdate ||
+    !email ||
+    !nationality ||
+    !password ||
+    !username ||
+    !confirmPsw
+  )
+    return res({
+      code: 400,
+      message:
+        'Username, password, email, nationality and password are all required fields!',
+    });
 
-    if (password !== confirmPsw) {
-        return res({
-            code: 400,
-            message: 'Passwords do not match!',
-        });
-    }
+  if (password !== confirmPsw) {
+    return res({
+      code: 400,
+      message: 'Passwords do not match!',
+    });
+  }
 
-    try {
-        const doesUserExist = await User.findOne({ username }).exec();
+  try {
+    const doesUserExist = await User.findOne({ username }).exec();
 
-        if (doesUserExist)
-            return res({ code: 400, message: 'This username already exists!' });
+    if (doesUserExist)
+      return res({ code: 400, message: 'This username already exists!' });
 
-        const userFromClient = call.request;
-        delete userFromClient.confirmPsw;
+    const userFromClient = call.request;
+    delete userFromClient.confirmPsw;
 
-        const { value, error } = userSchema.validate(userFromClient);
+    const { value, error } = userSchema.validate(userFromClient);
 
-        if (error)
-            return res({
-                code: 400,
-                message: error.details.map((err) => err.message).join(', '),
-            });
+    if (error)
+      return res({
+        code: 400,
+        message: error.details.map((err) => err.message).join(', '),
+      });
 
-        userFromClient.password = bcrypt.hashSync(
-            userFromClient.password as string
-        );
+    userFromClient.password = bcrypt.hashSync(
+      userFromClient.password as string
+    );
 
-        const user = new User(userFromClient);
+    const user = new User(userFromClient);
 
-        await user.save();
-        console.log('User saved to database successfully!');
-        res(null);
-    } catch (error) {
-        throw error;
-    }
+    await user.save();
+    console.log('User saved to database successfully!');
+    res(null);
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function signUserInHandler(
-    call: grpc.ServerUnaryCall<UserCredentials__Output, Token>,
-    res: grpc.sendUnaryData<SignInResponse>
+  call: grpc.ServerUnaryCall<UserCredentials__Output, Token>,
+  res: grpc.sendUnaryData<SignInResponse>
 ): Promise<void> {
-    console.log('caught sign in call!!!!');
-    const { usernameOrEmail, password } = call.request;
+  console.log('caught sign in call!!!!');
+  const { usernameOrEmail, password } = call.request;
 
-    if (!usernameOrEmail || !password)
-        return res({
-            code: 400,
-            message: 'Username/email and password are required!',
-        });
+  if (!usernameOrEmail || !password)
+    return res({
+      code: 400,
+      message: 'Username/email and password are required!',
+    });
 
-    try {
-        const userFromDb = await User.findOne({
-            $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
-        }).exec();
+  try {
+    const userFromDb = await User.findOne({
+      $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+    }).exec();
 
-        if (!userFromDb)
-            return res({ code: 400, message: "User doesn't exist!" });
+    if (!userFromDb) return res({ code: 400, message: "User doesn't exist!" });
 
-        const didPasswordMatch = bcrypt.compareSync(
-            password,
-            userFromDb.password
-        );
+    const didPasswordMatch = bcrypt.compareSync(password, userFromDb.password);
 
-        if (!didPasswordMatch)
-            return res({ code: 400, message: 'Incorrect credentials!' });
+    if (!didPasswordMatch)
+      return res({ code: 400, message: 'Incorrect credentials!' });
 
-        const token = jwt.sign({ ...userFromDb }, 'mykey', {
-            expiresIn: '10m',
-        });
+    const token = jwt.sign({ ...userFromDb }, 'mykey', {
+      expiresIn: '10m',
+    });
 
-        console.log('Signed in successfully!');
+    console.log('Signed in successfully!');
 
-        res(null, { token, user: userFromDb });
-    } catch (error) {
-        throw error;
-    }
+    res(null, { token, user: userFromDb });
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function checkToken(
-    call: grpc.ServerUnaryCall<Token__Output, Empty>,
-    res: grpc.sendUnaryData<Empty>
+  call: grpc.ServerUnaryCall<Token__Output, Empty>,
+  res: grpc.sendUnaryData<Empty>
 ) {
-    const { token } = call.request;
-    try {
-        jwt.verify(token as string, 'mykey');
-        res(null);
-    } catch (error: any) {
-        res({ code: 401, message: error.message });
-    }
+  const { token } = call.request;
+  try {
+    jwt.verify(token as string, 'mykey');
+    res(null);
+  } catch (error: any) {
+    res({ code: 401, message: error.message });
+  }
 }
 
 export async function refreshToken(
-    call: grpc.ServerUnaryCall<Token__Output, Token>,
-    res: grpc.sendUnaryData<Token>
+  call: grpc.ServerUnaryCall<Token__Output, Token>,
+  res: grpc.sendUnaryData<Token>
 ) {
-    const { token } = call.request;
+  const { token } = call.request;
 
-    if (!token) {
-        return res({ code: 401, message: 'You are not authenticated!' });
-    }
+  if (!token) {
+    return res({ code: 401, message: 'You are not authenticated!' });
+  }
 
-    const user = jwt.decode(token) as any;
+  const user = jwt.decode(token) as any;
 
-    delete user.exp;
-    delete user.iat;
+  delete user.exp;
+  delete user.iat;
 
-    let newToken: string;
+  let newToken: string;
 
-    if (user._doc) {
-        newToken = jwt.sign({ ...user._doc }, 'mykey', { expiresIn: '10m' });
-    } else {
-        newToken = jwt.sign({ ...user }, 'mykey', { expiresIn: '10m' });
-    }
+  if (user._doc) {
+    newToken = jwt.sign({ ...user._doc }, 'mykey', { expiresIn: '10m' });
+  } else {
+    newToken = jwt.sign({ ...user }, 'mykey', { expiresIn: '10m' });
+  }
 
-    res(null, { token: newToken });
+  res(null, { token: newToken });
 }
